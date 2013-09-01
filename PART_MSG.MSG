@@ -222,7 +222,7 @@ HEADER_SYSTYPE
 [de]"  ID     Dateisystem Typ           ???     "
 [ru]"  ID   ’¨¯ ä ©«®¢®© á¨áâ¥¬ë        ???     "
 [fr]"  ID   Type systŠme fichier        ???     "
-[it]"  ID     File Sistema Tipo         ???     "
+[it]"  ID     Tipo di filesystem        ???     "
 [nl]"  ID   Bestandssysteem type        ???     "
 [cs]"  ID   Typ datov‚ho syst‚mu        ???     "
 
