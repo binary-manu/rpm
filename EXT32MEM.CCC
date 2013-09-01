@@ -1,0 +1,152 @@
+#include "ext32.h"
+/********************** Memory management ***************************/
+/*
+   Very quick and dirty. (In other words - simple and slow).
+   
+   free_memory_list must be organised with some sort of index (later).
+*/
+
+#define aligned(x,n)  ( ((x)+(n)-1) & (~((n)-(1))) )
+
+
+/* These must be placed at the beginning of malloc and free functions
+   in the generated assembly file in order to provide new and delete
+   operators for C++ programs.
+
+	public		@$bnew$qui
+	@$bnew$qui	proc	near
+	@$bnew$qui	endp
+
+	public		@$bdele$qpv
+	@$bdele$qpv	proc	near
+	@$bdele$qpv	endp
+*/
+
+struct mem_node
+    {
+     int size;
+     int is_free;
+     struct mem_node *next;
+     struct mem_node *prev;
+    };
+
+static struct mem_node *mem_list;
+
+
+void mem_lib_init(char *heap_start, long heap_size)   /* called before main */
+{
+ mem_list = (struct mem_node *)heap_start;
+
+ mem_list -> size = heap_size;
+ mem_list -> is_free = 1;
+ mem_list -> next = 0;
+ mem_list -> prev = 0;
+
+}/* mem_lib_init */
+
+
+int mem_left(void)
+{
+ int sum=0;
+ struct mem_node *p;
+
+ for( p=mem_list ; p!=0 ; p=p->next )
+  if( p->is_free )
+    {
+     sum += p->size-16;
+    }
+
+ return sum; 
+}/* mem_left */
+
+
+int mem_largest(void)
+{
+ int l=0;
+ struct mem_node *p;
+
+ for( p=mem_list ; p!=0 ; p=p->next )
+  if( p->is_free && p->size-16 > l )
+    {
+     l = p->size-16;
+    }
+
+ return l; 
+}/* mem_largest */
+
+
+void *malloc(int len)
+{
+ struct mem_node *p, *r;
+
+ // align_len_to_next_16 + 16
+ 
+ len = aligned(len,16)+16;
+ 
+ for( p=mem_list ; p!=0 ; p=p->next )
+  if( p->is_free && p->size>=len )
+    {
+     if( p->size-len >= 32 ) /* split */
+       {
+        r = (struct mem_node*)( ((char*)p)+len );
+        r->prev=p;
+        r->next=p->next;
+        p->next=r;
+        if( r->next!=0 ) r->next->prev=r;
+        r->size=p->size-len;
+        p->size=len;
+        // mark_free(r);
+        r->is_free=1;
+        // put_on_free_list(r);
+       }
+     // mark_taken(p);
+     p->is_free=0;
+     // remove_from_free_list(p);
+     break;
+    }
+ 
+ if( p==0 ) return 0;
+
+// cprintf(7,60,1,"malloc: %3d -> %p ",len,(void *)(((char*)p) + 16));
+// get_key();
+
+ return (void *)(((char*)p) + 16);
+}/* malloc */
+
+
+void free(void *xxx)
+{
+ struct mem_node *p;
+ 
+ if( xxx==0 ) return;
+ 
+ p = (struct mem_node *)( ((char*)xxx) - 16 );
+
+ if( p->is_free ) return;
+ 
+ // mark_free(p)
+
+ p->is_free=1;
+  
+ if( p->next!=0 && p->next->is_free )  /* merge right */
+   {
+    // remove_from_free_list(p->next)
+    
+    p->size += p->next->size;
+    p->next  = p->next->next;
+    if( p->next!=0 ) p->next->prev = p;
+   }
+ 
+ if( p->prev!=0 && p->prev->is_free ) /* merge left */
+   {
+    // remove_from_free_list(p)
+
+    p = p->prev;
+    p->size += p->next->size;
+    p->next  = p->next->next;
+    if( p->next!=0 ) p->next->prev = p;
+   }
+
+ // put_on_free_list(p);
+
+}/* free */

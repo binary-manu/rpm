@@ -1,0 +1,898 @@
+#
+# part_msg.msg
+#
+
+# If you think that some messages don't need to be translated,
+# just skip them, and english version will be used by default.
+
+#define VERSION "2.44 (beta) by Muthu  June 09, 2002"
+
+PROGRAM_TITLE
+
+[en]"Ranish Partition Manager       Version " VERSION
+[se]"Ranish Partion program         Version " VERSION
+[sp]"Ranish Director de Partici¢n   Versi¢n " VERSION
+[de]"Ranish Partition Manager       Version " VERSION
+[ru]"Ranish Partition Manager        Ç•‡·®Ô " VERSION
+[fr]"Ranish Partition Manager       Version " VERSION
+[it]"Ranish Partition Manager      Versione " VERSION
+[nl]"Ranish Partition Manager        Versie " VERSION
+[cs]"Ranish Partition Manager         Verze " VERSION
+
+MESG_GETTING
+
+[en]"Getting hard disk parameters ..."
+[se]"LÑser hÜrd disk parametrar ..."
+[sp]"Adquiriedo Disco Duro par†metros ..."
+[de]"Ermittle Plattenparameter ..."
+[ru]"á†Ø‡†Ë®¢†Ó Ø†‡†¨•‚‡Î §®·™† ..."
+[fr]"Recherche des paramätres ..."
+[it]"Acquisizione parametri disco ..."
+[nl]"Ophalen van vaste schijf parameters ..."
+[cs]"Z°sk†v†n° parametrÖ disku ..."
+
+MESG_READING
+
+[en]"Reading partition table ..."
+
+
+ERROR_DISK_INFO 
+
+[en]"Error getting hard disk parameters."
+[se]"Fel vid lÑsning av hÜrd disk parametrar."
+[sp]"Error consiguiendo par†metros del disco duro."
+[de]"Fehler beim Zugiff auf Festplatte."
+[ru]"éË®°™† Ø‡® Á‚•≠®® Ø†‡†¨•‚‡Æ¢ §®·™†."
+[fr]"Impossible d'obtenir les paramätres du disque dur."
+[it]"Errore nel ricavare i parametri del disco."
+[nl]"Fout tijdens ophalen van vaste schijf parameters."
+[cs]"Chyba p˝i p˝°stupu na disk."
+
+
+HEADER_DISK
+
+[en]"Hard Disk  .     ... Mbytes [  .... cylinders  x ... heads  x .. sectors ]"
+[se]"HÜrd Disk  .     ... Mbytes [  .... cylinders  x ... heads  x .. sectors ]"
+[sp]"Disco Duro .     ... Mbytes [  .... cilindros  x ... lados  x .. sectores]"
+[de]"Festplatte .     ... Mbytes [  .... Zylinder   x ... Kîpfe  x .. Sektoren]"
+[ru]"Ç®≠Á•·‚•‡  .     ... å°†©‚  [  ....  Ê®´®≠§‡†  x ... ·‚Æ‡Æ≠ x .. ·•™‚Æ‡† ]"
+[fr]"Disque Dur .     ... Moctet [  .... Cylindres  x ... tàtes  x .. secteurs]"
+[it]"Disco rig. .     ... Mbytes [  ....  cilindri  x ...  test  x .. settori ]"
+[nl]"Vaste sch. .     ... Mbyte  [  .... cylinders  x ... koppen x .. sectoren]"
+[cs]"PevnÏ disk .     ... MBytÖ  [  .... cylindrÖ   x ... hlav   x .. sektorÖ ]"
+
+HEADER_CHS
+
+[en]
+"                File                Starting         Ending      Partition\r\n"
+"# Type Row   System Type         Cyl Head Sect    Cyl Head Sect  Size [KB]"
+
+[se]
+"                Fil                 Startar          Slutar      Partition\r\n"
+"# ???? ???   System Typ          Cyl Sida Sekt    Cyl Sida Sekt  Strlk [K]"
+
+[sp]
+"               Archivo             Comenzando      Finalizando   Partici¢n\r\n"
+"# ???? ??? Tipo de Sistema       Cil Lado Secc    Cil Lado Secc  tama§o[K]"
+
+[de]
+"               Datei-               Start             Ende      Partitions\r\n"
+"# ???? ???   system Typ          Zyl Kopf Sekt    Zyl Kopf Sekt  Grî·e[KB]"
+
+[ru]
+"                í®Ø                 è•‡¢Î©          èÆ·´•§≠®©       é°ÍÒ¨ \r\n"
+"# ???? ??? î†©´Æ¢Æ© ë®·‚•¨Î      ñ®´ ë‚Æ‡ ë•™‚    ñ®´ ë‚Æ‡ ë•™‚    ‡†ß§•´†"
+
+[fr]
+"           Type de systäme           DÇbut            Fin       Taille[Ko]\r\n"
+"# ???? ???   de fichier          Cyl Face Sect    Cyl Face Sect  partition"
+
+[it]
+"                File                Inizio            Fine      Partizione\r\n"
+"# ???? ??? Tipo di Sistema       Cil Lato Sett    Cil Lato Sett  Dim.  [K]"
+
+[nl]
+"            Type bestands-           Begin            Eind        Partitie\r\n"
+"# ???? ???    systeem            Cyl Kop  Sect    Cyl Kop  Sect  Omvang[K]"
+
+[cs]
+"         Typ souborovÇho           Poü†teün°        KoncovÏ      Velikost \r\n"
+"# ???? ???    systÇmu           cyl hlava sekt   cyl hlava sekt  obl. [KB]"
+
+
+HEADER_LBA
+
+[en]
+"                File             Starting  Number of     Ending  Partition\r\n"
+"# Type Row   System Type           sector    sectors     sector  Size [KB]"
+
+[se]
+"                Fil               Startar      Antal     Slutar  Partition\r\n"
+"# ???? ???   System Typ            sektor   sektorer     sektor  Strlk [K]"
+
+[sp]
+"               Archivo         Comenzando  N£mero de Finalizando Partici¢n\r\n"
+"# ???? ??? Tipo de Sistema         sector   sectores     sector  Tama§o[K]"
+
+[de]
+"               Datei-             Start    Anzahl der    Ende   Partitions\r\n"
+"# ???? ???   system Typ            Sektor   Sektoren     Sektor  Grî·e[KB]"
+
+[ru]
+"                í®Ø                è•‡¢Î© äÆ´®Á•·‚¢Æ  èÆ·´•§≠®©     é°ÍÒ¨ \r\n"
+"# ???? ??? î†©´Æ¢Æ© ë®·‚•¨Î        ·•™‚Æ‡   ·•™‚Æ‡Æ¢     ·•™‚Æ‡    ‡†ß§•´†"
+
+[fr]
+"           Type de systäme        DÇbut    Nombre de     Fin    Taille[Ko]\r\n"
+"# ???? ???   de fichier           secteur   secteurs    secteur  partition"
+
+[it]
+"                File              Inizio   Numero di     Fine   Partizione\r\n"
+"# ???? ??? Tipo di Sistema        settore   settori      settor  Dim.  [K]"
+
+[nl]
+"            Type bestands-         Begin    Aantal       Eind     Partitie\r\n"
+"# ???? ???    systeem              sector   sectoren     sector  Omvang[K]"
+
+[cs]
+"          Typ souborovÇho       Poü†teün°      Poüet    KoncovÏ   Velikost\r\n"
+"# ???? ???     systÇmu             sektor    sektorÖ     sektor  obl. [KB]"
+
+
+HEADER_EXT
+[en]"#  File System Type       Cyl Head Sect    Cyl Head Sect"
+
+HEADER_MINI
+[en]"# Partition   Size"
+
+USING_CHS
+[en]"Using CHS"
+
+USING_LBA
+[en]"Using LBA"
+
+PROBLEMS
+[en]"Problems"
+
+HELP
+[en]" Help "
+
+HINT_MBR
+
+[en]"ENTER - Edit options    S - Save MBR to file   L - Load MBR from file"
+
+HINT_WIZ
+
+[en]"ENTER - Start wizard    INS - select file system   DEL - clear record" 
+
+HINT_INS
+
+[en]"B - Boot flag on/off    INS - select file system   DEL - clear record"
+
+HINT_ROW
+
+[en]"1-4 - in which row in MBR to put this partition (space - don't care)"
+
+HINT_CHS 
+
+[en]"Use: +,-,0-9,BkSp    Cyl=0..%,d   Head=0..%d   Sect=1..%d"
+
+HINT_LBA 
+
+[en]"Use: +,-,0-9,BkSp    Starting=0..%,d   Sectors=1..%,d"
+
+ERR_PROBLEMS
+
+[en]" Problems with partition "
+
+ERR_ZERO
+
+[en]"Partition size may not be zero"
+
+ERR_RANGE
+
+[en]"Partition addresses are out of range"
+
+ERR_OVERLAP 
+
+[en]"Partition overlaps another partition"
+
+ERR_LOG_ORPH
+
+[en]"Partition is outside of extended partition"
+
+ERR_LOG_STRU
+
+[en]"Invalid layout of extended partition chain"
+
+ERR_CANT_READ
+
+[en]"Error reading boot sector from the disk"
+
+ERR_BOOT_SECT
+
+[en]"Boot sector doesn't have valid information"
+
+
+HEADER_SYSTYPE 
+
+[en]"  ID     File System Type       Supported  "
+[se]"  ID     Fil System Typ            ???     "
+[sp]"  ID   Archivo Sistema Tipo        ???     "
+[de]"  ID     Dateisystem Typ           ???     "
+[ru]"  ID   í®Ø ‰†©´Æ¢Æ© ·®·‚•¨Î        ???     "
+[fr]"  ID   Type systäme fichier        ???     "
+[it]"  ID     File Sistema Tipo         ???     "
+[nl]"  ID   Bestandssysteem type        ???     "
+[cs]"  ID   Typ datovÇho systÇmu        ???     "
+
+HINT_INSFSID
+
+[en]" INS - select unlisted file system "
+
+PROMPT_FSID 
+
+[en]"Enter two digit hex number: "
+[se]"Skriv fil system id: "
+[sp]"Entrar el id del archivo del systema: "
+[de]"Dateisystem ID: "
+[ru]"Ç¢•§®‚• Ë•·≠†§Ê†‚®‡®Á≠Î© ™Æ§ ·®·‚•¨Î: "
+[fr]"Entrez l'id du systäme de fichiers: "
+[it]"Inserire ID del file system: "
+[nl]"Bestandssysteem identificatie: "
+[cs]"Zadejte ü°slo souborovÇho systÇmu: "
+
+
+MESG_UNSUPPORTED
+[en]
+"This is unsupported file system.\n"
+"No additional details are available."
+
+
+MESG_WIZARD
+[en]
+"Press ENTER to start Partitioning Wizard,\n"
+"which will guide you through the creation\n"
+"of new partitions."
+
+
+ERROR_MALLOC 
+
+[en]"Cannot allocate more memory."
+[se]"Kunde inte allokera minne med malloc."
+[sp]"No pudo asignar mas memoria."
+[de]"Nicht genÅgend Speicher."
+[ru]"ç•§Æ·‚†‚ÆÁ≠Æ Ø†¨Ô‚®."
+[fr]"Impossible d'allouer plus de mÇmoire."
+[it]"Impossibile assegnare piu' memoria."
+[nl]"Er is onvoldoende geheugen beschikbaar."
+[cs]"M†lo pamÿti."
+
+ERROR_READ_PART_TABLE 
+
+[en]"Error reading MBR or EMBR from disk."
+[se]"Fel vid lÑsning av MBR ?? ???? frÜn disk."
+[sp]"Error leyendo MBR ?? ???? del disco."
+[de]"Fehler beim Lesen des MBR ?? ????."
+[ru]"éË®°™† Ø‡® Á‚•≠®® MBR ?? ???? · §®·™†."
+[fr]"Erreur de lecture du MBR ?? ???? du disque."
+[it]"Errore nella lettura del MBR ?? ???? dal disco."
+[nl]"Fout tijdens het lezen van de MBR ?? ????."
+[cs]"Chyba p˝i üten° MBR ?? ????."
+
+ERROR_SAVE_PART_TABLE
+
+[en]"Error writing MBR or EMBR to disk."
+[se]"Fel vid skrivning av MBR ?? ???? till disk."
+[sp]"Error escribiendo MBR ?? ???? al disco."
+[de]"Fehler beim Schreiben ?? ???? des MBR."
+[ru]"éË®°™† ß†Ø®·® MBR ??? ???? ≠† §®·™."
+[fr]"Erreur d'Çcriture du MBR ?? ???? du disque."
+[it]"Errore nella scrittura del MBR ?? ???? sul disco."
+[nl]"Fout tijdens het schrijven van de MBR ?? ????."
+[cs]"Chyba p˝i z†pisu MBR ?? ????."
+
+ERROR_READ_FILE 
+
+[en]"Error reading from file."
+[se]"Fel vid lÑsning frÜn fil."
+[sp]"Error leyendo desde archivo."
+[de]"Fehler beim Lesen der Datei."
+[ru]"éË®°™† Ø‡® Á‚•≠®® ®ß ‰†©´†."
+[fr]"Erreur de lecture d'un fichier."
+[it]"Errore nella lettura da file."
+[nl]"Fout bij het lezen van het bestand."
+[cs]"Chyba p˝i üten° souboru."
+
+ERROR_SAVE_FILE 
+
+[en]"Error writing to file."
+[se]"Fel vid skrivning till fil."
+[sp]"Error escribiendo al archivo."
+[de]"Fehler beim Schreiben in Datei."
+[ru]"éË®°™† Ø‡® ß†Ø®·® ¢ ‰†©´."
+[fr]"Erreur d'Çcriture d'un fichier."
+[it]"Errore nella scrittura su file."
+[nl]"Fout bij het schrijven naar het bestand."
+[cs]"Chyba p˝i z†pisu souboru."
+
+MESG_PART_TABLE_SAVED
+
+[en]"Partition table was saved to hard disk."
+[se]"?????? Ñr sparad till hÜrd disk."
+[sp]"?????? fue guardado en el disco duro."
+[de]"?????? wurde geschrieben."
+[ru]"?????? ·ÆÂ‡†≠Ò≠ ≠† §®·™."
+[fr]"?????? sauvÇ sur le disque dur."
+[it]"?????? ä stato salvato sul disco."
+[nl]"?????? is opgeslagen."
+[cs]"?????? byl zaps†n na disk."
+
+
+#MESG_DIFFERENT 
+
+#[en]"Differences found !!!"
+#[se]"Skillnad funnen !!!"
+#[sp]"Diferencias encontradas !!!"
+#[de]"Unterschiede gefunden !!!"
+#[ru]"ç†©§•≠Î ‡†ß´®Á®Ô !!!"
+#[fr]"Il y a des diffÇrences !!!"
+#[it]"Trovate differenze !!!"
+#[nl]"Verschillen gevonden !!!"
+#[cs]"Nalezeny rozd°ly !!!"
+
+#MESG_NO_DIFFERENCES 
+
+#[en]"No differences found."
+#[se]"Ingen skillnad funnen."
+#[sp]"No diferencias encontradas."
+#[de]"Keine Unterschiede gefunden."
+#[ru]"ê†ß´®Á®© ≠• ≠†©§•≠Æ."
+#[fr]"Pas de diffÇrences."
+#[it]"Nessuna differenza trovata."
+#[nl]"Geen verschillen gevonden."
+#[cs]"Nenalezeny rozd°ly."
+
+
+#PROMPT_FILE 
+
+#[en]"Enter file name: "
+#[se]"Skriv fil namn: "
+#[sp]"Entar nombre del archivo: "
+#[de]"Dateiname: "
+#[ru]"Ç¢•§®‚• ®¨Ô ‰†©´†: "
+#[fr]"Entrez le nom du fichier: "
+#[it]"Inserire nome file: "
+#[nl]"Bestandsnaam: "
+#[cs]"Zadejte jmÇno souboru: "
+
+#PROMPT_FORMAT 
+
+#[en]"Optional format arguments: "
+#[se]"Ytterligare formaterings argument: "
+#[sp]"Argumentos de formato opcional: "
+#[de]"Optionale Formatparameter: "
+#[ru]"Ç¢•§®‚• ™´ÓÁ® §´Ô ‰Æ‡¨†‚†, •·´® •·‚Ï: "
+#[fr]"Arguments de formatage optionnels: "
+#[it]"Argomenti opzionali di formattazione: "
+#[nl]"Optionele formatteer parameters: "
+#[cs]"VolitelnÇ parametry form†tov†n°: "
+
+MESG_COPYING 
+
+[en]"^Copying...                                          Press ESC to cancel"
+
+MESG_CLEANING 
+
+[en]"^Cleaning...                                         Press ESC to cancel"
+[se]"^Rensar...                                     Tryck ESC fîr att avbryta"
+[sp]"^Borrando...                                  Presione ESC para cancelar"
+[de]"^RÑume auf...                                          Abbrechen mit ESC"
+[ru]"^ó®·‚®¨...                                        ç†¶¨®‚• ESC §´Ô Æ‚¨•≠Î"
+[fr]"^Nettoyage...                                 Pressez Echap pour annuler"
+[it]"^Cancellazione...                              Premere ESC per annullare"
+[nl]"^Bezig met schoonmaken...                    Druk op ESC om af te breken"
+[cs]"^VÏmaz...                                       Odvolat stisknut°m <ESC>"
+
+MESG_VERIFYING 
+
+[en]"^Verifying...                                        Press ESC to cancel"
+[se]"^Verifierar...                                 Tryck ESC fîr att avbryta"
+[sp]"^Verificando...                               Presione ESC para cancelar"
+[de]"^Verifiziere...                                        Abbrechen mit ESC"
+[ru]"^Ç•‡®‰®Ê®‡„Ó...                                   ç†¶¨®‚• ESC §´Ô Æ‚¨•≠Î"
+[fr]"^VÇrification...                              Pressez Echap pour annuler"
+[it]"^Verifica...                                   Premere ESC per annullare"
+[nl]"^Bezig met controleren...                    Druk op ESC om af te breken"
+[cs]"^Kontrola...                                    Odvolat stisknut°m <ESC>"
+
+MESG_FORMATTING 
+
+[en]"^Formatting...                                       Press ESC to cancel"
+[se]"^Formatterar...                                Tryck ESC fîr att avbryta"
+[sp]"^Formatiando...                               Presione ESC para cancelar"
+[de]"^Formatiere...                                         Abbrechen mit ESC"
+[ru]"^îÆ‡¨†‚®‡„Ó...                                    ç†¶¨®‚• ESC §´Ô Æ‚¨•≠Î"
+[fr]"^Formatage...                                 Pressez Echap pour annuler"
+[it]"^Formattazione...                              Premere ESC per annullare"
+[nl]"^Bezig met formatteren...                    Druk op ESC om af te breken"
+[cs]"^Form†tov†n°...                                 Odvolat stisknut°m <ESC>"
+
+MESG_FORMAT_OK 
+
+[en]"Format completed."
+[se]"Formattering slutfîrd."
+[sp]"Formato completo."
+[de]"Formatieren beendet."
+[ru]"îÆ‡¨†‚ ß†¢•‡Ë•≠."
+[fr]"Formatage terminÇ."
+[it]"Formattazione completata."
+[nl]"formatteren gereed."
+[cs]"Form†tov†n° dokonüeno."
+
+WARN_FORMAT_CANCEL 
+
+[en]"Format canceled by user."
+[se]"Formattering avbruten av anvÑndare."
+[sp]"Formato cancelado por usuario."
+[de]"Formatierung abgebrochen."
+[ru]"îÆ‡¨†‚ Æ‚¨•≠Ò≠ ØÆ´ÏßÆ¢†‚•´•¨."
+[fr]"Formatage interrompu par l'utilisateur."
+[it]"Formattazione annullata dall'utente."
+[nl]"Formatteren is afgebroken."
+[cs]"Form†tov†n° p˝eruÁeno ußivatelem."
+
+ERROR_FORMAT_FAILED 
+
+[en]"Format failed."
+[se]"Formattering misslyckades."
+[sp]"Formato fallo."
+[de]"Formatierung fehlgeschlagen."
+[ru]"îÆ‡¨†‚®‡Æ¢†≠®• ≠• ·Æ·‚ÆÔ´Æ·Ï."
+[fr]"Formatage ratÇ."
+[it]"Formattazione fallita."
+[nl]"Formatteren mislukt."
+[cs]"Form†tov†n° ukonüeno chybou."
+
+MESG_VERIFY_OK 
+
+[en]"Verification completed. No bad sectors found."
+[se]"Verifiering avslutad. Inga dÜliga sektorer funna."
+[sp]"Verificaci¢n completa. No encontro sectores malos."
+[de]"OberflÑchentest beendet. Keine Fehler gefunden."
+[ru]"Ç•‡®‰®™†Ê®Ô ß†¢•‡Ë•≠†. ë°Æ©≠ÎÂ ·•™‚Æ‡Æ¢ ≠•‚. ç® Æ§≠Æ£Æ."
+[fr]"VÇrification terminÇe. Aucun secteur dÇfectueux."
+[it]"Verifica completata. Nessun settore difettoso."
+[nl]"Controle voltooid. Geen slechte sectoren gevonden."
+[cs]"Test povrchu dokonüen, vadnÇ sektory nebyly nalezeny."
+
+WARN_VERIFY_CANCEL 
+
+[en]"Verification canceled by user."
+[se]"Verifiering avbruten av anvÑndare."
+[sp]"Verificaci¢n cancelada por usuario."
+[de]"OberflÑchentest abgebrochen."
+[ru]"Ç•‡®‰®™†Ê®Ô Æ‚¨•≠•≠† ØÆ´ÏßÆ¢†‚•´•¨."
+[fr]"VÇrification interompue par l'utilisateur."
+[it]"Verifica annullata dall'utente."
+[nl]"Controle afgebroken."
+[cs]"Test povrchu p˝eruÁen ußivatelem."
+
+
+IPL_HINT_SPACE
+[en]
+"   Use Space to cycle\n"
+"   through the values\n\n"
+"Press Enter when done\n"
+ #ifdef DISK_SIM
+ "Press F10 to simulate"
+ #endif
+""
+
+IPL_OPTION1
+[en]
+#"Initial Program Loader:"
+#"Enable 100+ partitions:"
+#"Check for boot viruses:"
+#"Boot manager's timeout:"
+#"Default boot selection:"
+"MBR Executable code:"
+
+IPL_OPTIONS
+[en]
+"Boot interface type:\n"
+#"Boot manager option:\n"
+"Check for viruses:  \n"
+"Boot prompt timeout:\n"
+"Default boot choice:"
+
+MENU_ADV_OPT_TITLE 
+
+[en]"Menu title:"
+[se]"Meny titel:"
+[sp]"Titulo:"
+[de]"Menu Titel:"
+[ru]"á†£Æ´Æ¢Æ™:"
+[fr]"Titre du menu:"
+[it]"Titolo:"
+[nl]"Menu titel:"
+[cs]"N†zev nab°dky:"
+
+MENU_ADV_OPT_TIMEOUT 
+
+[en]"Boot menu timeout:"
+[se]"Boot meny avbrott:"
+[sp]"Finalizo boot menu:"
+[de]"Boot Menu Timeout:"
+[ru]"Ç‡•¨Ô Æ¶®§†≠®Ô:"
+[fr]"Limite de temps:"
+[it]"Scadenza boot menu:"
+[nl]"Boot menu time-out:"
+[cs]"Timeout zav. nab.:"
+
+MENU_ADV_OPT_VIRCHECK 
+
+[en]"Check for viruses:"
+[se]"Kolla fîr virus:"
+[sp]"Buscar virus:"
+[de]"Auf Viren prÅfen:"
+[ru]"è‡Æ¢•‡™† ≠† ¢®‡„·Î:"
+[fr]"Antivirus MBR:"
+[it]"Controllo virus:"
+[nl]"Viruscontrole:"
+[cs]"Kontrolovat viry:"
+
+MENU_ADV_OPT_CLEARSCR 
+
+[en]"Clear screen:"
+[se]"Rensa skÑrmen:"
+[sp]"Limpiar pantalla:"
+[de]"Bildschirm lîschen:"
+[ru]"ó®·‚®‚Ï Ì™‡†≠:"
+[fr]"Effacer l'Çcran:"
+[it]"Cancella schermo:"
+[nl]"Maak scherm leeg:"
+[cs]"Smazat obrazovku:"
+
+MENU_ADV_OPT_DEFAULT 
+
+[en]"Default boot menu:"
+[se]"Standard boot meny:"
+[sp]"Inicial menu boot:"
+[de]"Default Boot Menu:"
+[ru]"ç†Á†´Ï≠Æ• ¨•≠Ó:"
+[fr]"Menu par dÇfaut:"
+[it]"Menu boot standard:"
+[nl]"Standaard menu:"
+[cs]"Impl. zav. nab°dka:"
+
+MENU_ADV_OPT_PASSWORD 
+
+[en]"Menu password:"
+[se]"Menu password:"
+[sp]"Contrasena menu:"
+[de]"Menu password:"
+[ru]"è†‡Æ´Ï:"
+[fr]"Mot de passe:"
+[it]"Menu password:"
+[nl]"Menu wachtwoord:"
+[cs]"Heslo nab°dky:"
+
+
+
+FS_NAME_UNUSED     # No more than 10 characters 
+
+[en]"Unused"
+[se]"Unused"
+[sp]"Sin uso"
+[de]"Leer"
+[ru]"ç• ®·Ø."
+[fr]"InutilisÇ"
+[it]"Non usato"
+[nl]"Ongebruikt"
+[cs]"Nevyußito"
+
+FS_NAME_HIDDEN     # No more than 10 characters 
+
+[en]"Hidden"
+[se]"Gîmd"
+[sp]"Escondido"
+[de]"Versteckt"
+[ru]"ëØ‡Ô‚†≠"
+[fr]"CachÇ"
+[it]"Nascosto"
+[nl]"Verborgen"
+[cs]"Skryto"
+
+FS_NAME_UNKNOWN    # No more than 10 characters 
+
+[en]"Unknown"
+[se]"OkÑnd"
+[sp]"No conocido"  "\0" "No conocid"
+[de]"Unbekannt"
+[ru]"ç•®ß¢•·‚≠Î©"  "\0" "ç•®ß¢•·‚."
+[fr]"Inconnu"
+[it]"Sconsciuto"
+[nl]"Onbekend"
+[cs]"Nezn†mo"
+
+
+EXT_NOT_BOOTABLE
+
+[en]"\r\nExtended partition is not bootable."
+    "\r\nHit a key to reboot..."
+[se]"\r\nUtîkade partitionrn Ñr inte bootbar."
+    "\r\nTryck en tangent fîr att boota om..."
+[sp]"\r\nPartici¢n extendida no es bootable."
+    "\r\nPresionar una tecla para reiniciar..."
+[de]"\r\nExtended Partition ist nicht startbar."
+    "\r\nTaste um das System neu zu starten..."
+[ru]"\r\nê†·Ë®‡•≠≠Î© ‡†ß§•´ ≠• ß†£‡„ßÆÁ≠Î©."
+    "\r\nç†¶¨®‚• ´Ó°„Ó ™´†¢®Ë„ ..."
+[fr]"\r\nPartition Etendue non bootable."
+    "\r\nPressez une touche pour redÇmarrer..."
+[it]"\r\nPartizione estesa non avviabile."
+    "\r\nPremere un tasto per riavviare..."
+[nl]"\r\nUitgebreide partitie niet startbaar."
+    "\r\nDruk een toets om te herstarten."
+[cs]"\r\nZ rozÁ°˝enÇ oblasti nelze zavÇst systÇm."
+    "\r\nPro restartov†n° stisknÿte kl†vesu..."
+
+MESG_NON_SYSTEM
+
+[en]"\r\nSystem is not installed."
+    "\r\nHit a key to reboot..."
+[se]"\r\nSystem Ñr inte installerat."
+    "\r\nTryck en tangent fîr reboot..."
+[sp]"\r\nSistema no esta instalado."
+    "\r\nPresione una tecla para reiniciar..."
+[de]"\r\nKein System installiert."
+    "\r\nTaste um das System neu zu starten..."
+[ru]"\r\në®·‚•¨≠Î• ‰†©´Î Æ‚·„‚·‚¢„Ó‚."
+    "\r\nç†¶¨®‚• ´Ó°„Ó ™´†¢®Ë„ ..."
+[fr]"\r\nPas de systäme installÇ."
+    "\r\nPressez une touche pour redÇmarrer..."
+[it]"\r\nSistema non installato."
+    "\r\nPremere un tasto per riavviare..."
+[nl]"\r\nSysteem niet geinstalleerd."
+    "\r\nDruk een toets om te herstarten..."
+[cs]"\r\nSystÇm nen° instalov†n."
+    "\r\nPro restartov†n° stisknÿte kl†vesu..."
+
+
+MAIN_BORDER     # Don't "translate" these, unless your code page requires
+[en]"…Õª∫ ∫»Õº"
+
+VERT_BORDER
+[en]"∫ ∫∫ ∫∫ ∫"
+
+HORIZONTAL
+[en]" ƒ "
+
+STEP_BORDER
+[en]"…Õ—∫ ≥»Õœ"
+
+BOX1_BORDER
+[en]"«ƒ∂∫ ∫»Õº"
+
+BOX2_BORDER
+[en]"¬ƒ∂≥ ∫œÕº"
+
+SINGLE_BORDER
+[en]"⁄ƒø≥ ≥¿ƒŸ"
+
+PART_TYPE_PRI
+[en]"Pri %c"
+
+PART_TYPE_EXT
+[en]"∆ Ext"
+
+PART_TYPE_LOG
+[en]"√ Log"
+
+
+GUI_HELP_TEXT
+[en]
+"HELP\n\n"
+"A - Make floppy disk that boots PART.EXE\n"
+"B - Toggle boot flag\n"
+"C - Copy partition\n"
+"D - Copy entire disk\n"
+"E - Erase partition\n"
+"F - Format FAT-16 / FAT-32 partition\n"
+"H - Hide/unhide partition\n"
+"V - Verify partition's surface\n\n"
+"Run \"part -help\" for command line options\n\n"
+"For more information go to: www.ranish.com/part\n"
+#"T - Scan disk for lost partitions (not implemented yet)\n\n"
+
+#-STOP-#
+
+CMD_HELP_TEXT
+[en]
+"Usage:\t\part\r\n"
+"\t\part -p\r\n"
+"\t\part -p -r > disk1.txt\r\n"
+"\t\part -d 2 -p -r > disk2.txt\r\n"
+#"Usage:  part [-d <disk>]  [-p [-r] ]\r\n\r\n"
+#"Run program without options to start GUI\r\n\r\n"
+#"Run \"part -p\"  to print partition table\r\n"
+#"Run \"part -p -r > disk1.txt\"  to save partition table\r\n"
+#"Run \"part -d 2 -p -r > disk2.txt\"  to save information for the second disk\r\n"
+#"\r\nFor more information visit  http://www.ranish.com/part/\r\n"
+
+
+#-STOP-#
+
+CMD_HELP_TEXT
+
+[en]"Ranish Partition Manager    Version "VERSION"\n\n"
+
+"Usage: part [-q] [-d disk] [-command ...]\n\n"
+
+" part          - Interactive mode\n"
+" part -i       - Print IDE disk info\n"
+" part -p       - Print partition table\n"
+" part -p -r    - Print info recursively\n"
+" part -a n     - Activate n-th partition\n"
+" part -v n     - Verify n-th partition\n"
+" part -f n ... - Format n-th partition\n"
+" part -s file  - Save MBR to file\n"
+" part -l file  - Load MBR from file\n"
+" part -c file  - Compare MBR with file\n"
+" part -Reboot  - Reboot computer\n\n"
+
+"Homepage: "HOME_URL"\n"
+
+
+[se]"Ranish Partition Manager    Version "VERSION"\n\n"
+
+"AnvÑndning: part [-q] [-d disk] [-kommand ...]\n\n"
+
+" part          - Interaktivt lÑge\n"
+" part -i       - Skriv ut IDE disk info\n"
+" part -p       - Skriv ut partition tabell\n"
+" part -p -r    - Skriv ut info rekursivt\n"
+" part -a n     - Aktivera n-th partition\n"
+" part -v n     - Verifiera n-th partition\n"
+" part -f n ... - Formattera n-th partition\n"
+" part -s fil   - Spara MBR till en fil\n"
+" part -l fil   - Ladda MBR frÜn en fil\n"
+" part -c file  - JÑmfîr MBR med fil\n"
+" part -Reboot  - Boota om datorn\n\n"
+
+"Produkt hem: "HOME_URL"\n"
+
+
+[sp]"Ranish Partition Manager    Versi¢n "VERSION"\n\n"
+
+"Usage: part [-q] [-d disk] [-command ...]\n\n"
+
+" part          - Modo Interactivo \n"
+" part -i       - Imprimir disco info IDE\n"
+" part -p       - Imprimir tabla de partici¢n\n"
+" part -p -r    - Imprimir info recursivamente\n"
+" part -a n     - Activar n-ava partici¢n\n"
+" part -v n     - Verificar n-ava partici¢n\n"
+" part -f n ... - Formatear n-ava partici¢n\n"
+" part -s file  - Guardar MBR en un archivo\n"
+" part -l file  - Cargar MBR de un archivo\n"
+" part -c file  - Compare MBR con archivo\n"
+" part -Reboot  - Reboot computadora\n\n"
+
+"Homepage: "HOME_URL"\n"
+
+
+[de]"Ranish Partition Manager    Version "VERSION"\n\n"
+
+"Aufruf: part [-q] [-d Platte] [-Kommando ...]\n\n"
+
+" part          - Interaktiver Modus\n"
+" part -i       - IDE Infos anzeigen\n"
+" part -p       - Partitionstabelle anzeigen\n"
+" part -p -r    - Alle Partitionstabellen anzeigen\n"
+" part -a n     - Mache n-te Partition startbar\n"
+" part -v n     - öberprÅfe n-te Partition\n"
+" part -f n ... - Formatiere n-te Partition\n"
+" part -s Datei - Speichere MBR in eine Datei\n"
+" part -l Datei - Lade MBR aus einer Datei\n"
+" part -c Datei - Vergleiche MBR mit Datei\n"
+" part -Reboot  - Rechner neu starten\n\n"
+
+"Bezugsquelle: "HOME_URL"\n"
+
+
+[ru]"Ranish Partition Manager    Version "VERSION"\n\n"
+
+"Usage: part [-q] [-d disk] [-command ...]\n\n"
+
+" part          - à≠‚•‡†™‚®¢≠Î© ‡•¶®¨"
+" part -i       - ç†Ø•Á†‚†‚Ï IDE disk info\n"
+" part -p       - ç†Ø•Á†‚†‚Ï ‚†°´®Ê„ ‡†ß§•´Æ¢\n"
+" part -p -r    - ç†Ø•Á†‚†‚Ï ¢·Ò, Á‚Æ ¨Æ¶≠Æ\n"
+" part -a n     - ë§•´†‚Ï ‡†ß§•´ n ‚•™„È®¨ (†™‚®¢≠Î¨)\n"
+" part -a n     - Ä™‚®¢®ß®‡Æ¢†‚Ï n-‚Î© ‡†ß§•´\n"
+" part -v n     - Ç•‡®‰®Ê®‡Æ¢†‚Ï n-‚Î© ‡†ß§•´\n"
+" part -f n ... - é‚‰Æ‡¨†‚®‡Æ¢†‚Ï n-‚Î© ‡†ß§•´\n"
+" part -s file  - ëÆÂ‡†≠®‚Ï MBR ¢ ‰†©´\n"
+" part -l file  - á†£‡„ß®‚Ï MBR ®ß ‰†©´†\n"
+" part -c file  - ë‡†¢≠®‚Ï MBR · ‰†©´Æ¨\n"
+" part -Reboot  - è•‡•£‡„ß®‚Ï ™Æ¨ØÏÓ‚•‡\n\n"
+
+"Homepage: "HOME_URL"\n"
+
+
+[fr]"Ranish Partition Manager    Version "VERSION"\n\n"
+
+"Utilisation: part [-q] [-d disque] [-commande ...]\n\n"
+
+" part          - Mode interactif\n"
+" part -i       - Affiche les informations du disque IDE\n"
+" part -p       - Affiche la table de partition\n"
+" part -p -r    - Affiche les informations de maniäre rÇcursive\n"
+" part -a n     - Active la partition n¯ n\n"
+" part -v n     - Verifie la partition n¯ n\n"
+" part -f n ... - Formate la partition n¯ n\n"
+" part -s file  - Sauve le MBR dans un fichier\n"
+" part -l file  - Charge le MBR Ö partir d'un fichier\n"
+" part -c file  - Compare le MBR avec un fichier\n"
+" part -Reboot  - RedÇmarre l'ordinateur\n\n"
+
+"Site du produit: "HOME_URL"\n"
+
+
+[it]"Ranish Partition Manager    Version "VERSION"\n\n"
+
+"Usage: part [-q] [-d disk] [-command ...]\n\n"
+
+" part          - Modo Interattivo \n"
+" part -i       - Stampa informazioni disco IDE\n"
+" part -p       - Stampa tabella delle partizioni\n"
+" part -p -r    - Stampa continua informazioni\n"
+" part -a n     - Attiva n-esima partizione\n"
+" part -v n     - Verifica n-esima partizione\n"
+" part -f n ... - Formatta n-esima partizione\n"
+" part -s file  - Salva MBR su file\n"
+" part -l file  - Carica MBR da file\n"
+" part -c file  - Confronta MBR con file\n"
+" part -Reboot  - Riavvia computer\n\n"
+
+"Homepage: "HOME_URL"\n"
+
+
+[nl]"Ranish Partition Manager    Versie "VERSION"\n\n"
+
+"Gebruik: part [-q] [-d disk] [-command ...]\n\n"
+
+" part          - Interactieve modus\n"
+" part -i       - Toon informatie over de IDE-schijf\n"
+" part -p       - Toon partitie informatie\n"
+" part -p -r    - Toon alle partitie tabellen\n"
+" part -a n     - Activeer de n-ste partitie\n"
+" part -v n     - Controleer de n-ste partitie\n"
+" part -f n ... - Formatteer de n-ste partitie\n"
+" part -s file  - Sla de MBR op naar een bestand\n"
+" part -l file  - Laad de MBR vanuit een bestand\n"
+" part -c file  - Vergelijk de MBR met een bestand\n"
+" part -Reboot  - Herstart de computer\n\n"
+
+"Homepage: "HOME_URL"\n"
+
+
+[cs]"Ranish Partition Manager    Verze "VERSION"\n\n"
+
+"SpuÁtÿn°: part [-q] [-d disk] [-p˝°kaz ...]\n\n"
+
+" part           - Interaktivn° reßim\n"
+" part -i        - Zobrazit informace o IDE\n"
+" part -p        - Zobrazit tabulku oblast°\n"
+" part -p -r     - Zobrazit vÁechny oblasti\n"
+" part -a n      - Uüinit n-tou oblast aktivn°\n"
+" part -v n      - Kontrolovat n-tou oblast\n"
+" part -f n ...  - Form†tovat n-tou oblast\n"
+" part -s soubor - Uschovat MBR do souboru\n"
+" part -l soubor - Obnovit MBR ze souboru\n"
+" part -c soubor - Porovnat MBR se souborem\n"
+" part -Reboot   - Restartovat poü°taü\n\n"
+
+"Dom†c° adresa: "HOME_URL"\n"

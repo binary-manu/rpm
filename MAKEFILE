@@ -1,0 +1,128 @@
+# Tools:
+#
+#  MAKE Version 4.0  Copyright (c) 1987, 1996 Borland International
+#  Borland C++ 5.0 for Win32  Copyright (c) 1993, 1996 Borland International
+#  Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International
+#  Turbo Link  Version 7.1.30.1  Copyright (c) 1987, 1996 Borland International
+#
+# In order to make this project you must disable default compilation rules in
+# file "bc5\bin\builtins.mak" (because we compile C -> ASM -> OBJ, not C->OBJ)
+
+AS = tasm /ml /m3 /l
+CC = bcc32 -d -O -O2 -S -u- -x-
+LD = tlink -m -M -s -C -l -3 -c
+AR = tlib /c /p32
+
+.cpp.obj:
+	$(CC)  -o$&.asx $&.cpp
+	helper -fix_asm $&.asx
+	$(AS)  $&.asx
+
+.c.obj:
+	$(CC)  -o$&.asx $&.c
+	helper -fix_asm $&.asx
+	$(AS) $&.asx
+
+.asm.obj:
+	$(AS) $&.asm
+
+.cpp.i:
+	cpp32 $&.cpp
+
+LNG = cs de fr it nl ru se sp
+
+EXT_OBJ = ext32.obj ext32cpp.obj ext32lib.obj ext32mem.obj
+WIN_OBJ = graph.obj  window.obj  fnt_ibm.obj  fnt_tiny.obj
+
+TEST_OBJ = test.obj
+BOOT_OBJ = boot.obj boot2.obj part_aux.obj part_bmg.obj part_tab.obj \
+           part_vtc.obj part_msg.obj ipl.obj
+
+PART_OBJ = ipl.obj boot_f1x.obj bmboot.obj \
+       part.obj part_aux.obj part_bmg.obj part_cmd.obj part_dsk.obj \
+		part_fat.obj part_gui.obj part_msg.obj part_tab.obj \
+		part_vtc.obj part_wiz.obj part_zip.obj
+
+PCMD_OBJ = part_cmd.obj ipl.obj boot_f1x.obj \
+           part_aux.obj part_dsk.obj part_fat.obj part_tab.obj
+
+#part_cmd: part_cmd.exe helper.exe
+
+en:   helper.exe part.exe
+all:  helper.exe en $(LNG)
+boot: helper.exe boot.exe
+part: helper.exe part.exe
+test: helper.exe test.exe
+
+
+ext32.obj: ext32.asm ext32con.inc ext32dsk.inc ext32dos.inc ext32msc.inc \
+                     ext32a20.inc ext32dpm.inc ext32raw.inc ext32xms.inc \
+                     ext32vid.inc
+
+#$(TEST_OBJ):: ext32.h graph.h window.h
+$(PART_OBJ):: ext32.h part.h part_msg.h part_vtc.h disk_sim.h
+#$(PCMD_OBJ):: ext32.h graph.h window.h part.h part_msg.h part_vtc.h disk_sim.h
+#$(BOOT_OBJ):: ext32.h graph.h window.h part.h part_msg.h part_vtc.h
+
+part_dsk.obj:: disk_sim.inc
+
+boot.exe: $(EXT_OBJ) $(WIN_OBJ) $(BOOT_OBJ)
+	$(LD) @&&!
+	  $(EXT_OBJ) $(WIN_OBJ) $(BOOT_OBJ)
+	  boot.exe
+!
+	helper -fix_exe boot.exe
+
+
+#$(WIN_OBJ)
+part.exe: $(EXT_OBJ) $(PART_OBJ)
+	$(LD) @&&!
+	  $(EXT_OBJ) $(PART_OBJ)
+	  part.exe
+!
+	helper -fix_exe part.exe
+
+part_cmd.exe: $(EXT_OBJ) $(PCMD_OBJ)
+	$(LD) @&&!
+	  $(EXT_OBJ) $(PCMD_OBJ)
+	  part_cmd.exe
+!
+	helper -fix_exe part_cmd.exe
+
+
+test.exe:     $(EXT_OBJ) $(WIN_OBJ) $(TEST_OBJ)
+	$(LD) @&&!
+	  $(EXT_OBJ) $(WIN_OBJ) $(TEST_OBJ)
+	  test.exe
+!
+	helper -fix_exe  test.exe
+
+
+part_msg.h part_msg.c: part_msg.msg
+	helper -exp_msg en part_msg.c part_msg.h
+	$(CC) -opart_msg.asx part_msg.c
+	helper -fix_asm part_msg.asx
+	$(AS) part_msg.asx
+
+$(LNG):	$(EXT_OBJ) $(WIN_OBJ) $(PART_OBJ)
+	helper -exp_msg $@ part_msg.c part_msg.h
+	$(CC) -opart_msg.asx part_msg.c
+	helper -fix_asm  part_msg.asx
+	$(AS) part_msg.asx
+	$(LD) @&&!
+	   $(EXT_OBJ) $(WIN_OBJ) $(PART_OBJ)
+	   part-$@.exe
+!
+	del part_msg.obj
+
+helper.exe: helper.c
+	tcc helper.c
+	del helper.obj
+
+zip: en
+	pklite part*.exe
+	pkzip -ex sources.zip makefile *.bat *.asm *.inc *.c* *.h *.msg *.txt
+	pkzip -ex partbeta.zip *.txt part*.exe cwsdpmi.exe
+
+clean:
+	@clean.bat

@@ -1,0 +1,135 @@
+public vesa_mode, text_mode, put_pixel, get_mouse
+
+vesa_mode	proc	C	near
+		
+		arg	@@mode: dword
+
+		push	esi
+		push	edi
+		push	ebx
+		
+;jmp	@@go_vga
+		
+		mov	vmode, 1
+		mov	ax, 4F02h	; set VESA 640x480x256
+		mov	bx, 08101h
+		rm_int	10h
+		cmp	ax, 004Fh	; Is it ok?
+		;jne	@@errors
+		jne	@@go_vga
+		
+		mov	ax, 4F0Ah	; Get PM VESA interface
+		mov	bl, 0
+		rm_int	10h
+		cmp	ax, 004Fh
+		jne	@@slow		; Interface is not supported
+		cmp	di, 73A8h
+		jne	@@slow		; Not my own machine: I used BIOS code
+@@fast:
+		mov	vmode, 2	; to draw without going PM->RM->PM
+@@slow:
+		jmp	@@screen_ok
+@@go_vga:
+		mov	vmode, 0	; Force int 10h output
+		mov	ax, 12h		; set VGA 640x480x16
+		rm_int	10h
+@@screen_ok:
+		pop	ebx
+		pop	edi
+		pop	esi
+
+		ret
+
+vesa_mode	endp
+
+text_mode	proc	near
+		
+		push	esi
+		push	edi
+		push	ebx
+
+		mov	ax, 03h
+		rm_int	10h
+
+		pop	ebx
+		pop	edi
+		pop	esi
+
+		ret
+
+text_mode	endp
+
+put_pixel	proc	C	near
+		
+		arg	@@color: dword, @@x: dword, @@y:dword
+
+		push	esi
+		push	edi
+		push	ebx
+		
+		cmp	@@x,640
+		jae	@@end
+		cmp	@@y,480
+		jae	@@end
+
+		cmp	vmode, 0
+		jne	@@vesa
+		
+		mov	eax, @@color
+		mov	 ah, 0Ch
+		xor	ebx, ebx
+		mov	ecx, @@x
+		mov	edx, @@y
+		rm_int	10h
+		jmp	@@end
+@@vesa:
+		mov	ebx, @@y
+		imul	ebx, 640
+		add	ebx, @@x
+
+		push	ebx	; Offset of the pixel
+		shr	ebx, 16	; Which of the 64k pages it is?
+		and	bl, 7	; No more than 8 of them !? ???
+		
+		cmp	vmode, 1
+		jne	@@direct
+		
+		xor	edx, edx
+		mov	dl, bl
+		mov	ax, 4F05h
+		xor	ebx, ebx
+		rm_int	10h
+		jmp	@@skip_page
+@@direct:
+		mov	edx, 3CEh
+		mov	al, 9
+		out	dx, al
+		inc	edx
+		in	al, dx
+		push	eax
+		and	al, 7
+		cmp	al, bl	; is this page already set?
+		pop	eax
+		je	@@skip_page
+		and	al, 11111000b
+		or	al, bl
+		out	dx, al
+@@skip_page:
+		pop	ebx		; Pixel offset
+		and	ebx, 0FFFFh	; on 64k page
+		
+		push	ds
+		mov	ds, zero_sel
+		or	ebx, 0A0000h
+		mov	eax, @@color
+		mov	[ebx], al
+		pop	ds
+@@end:
+		pop	ebx
+		pop	edi
+		pop	esi
+
+		
+		ret
+
+put_pixel	endp
