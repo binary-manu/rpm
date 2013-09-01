@@ -3,6 +3,10 @@
 /BMBOOT.ASM -text
 /BOOT_F1X.ASM -text
 /CLEAN.BAT -text
+/CMOS.CPP -text
+/CMOS.H -text
+/COMMON.CPP -text
+/COMMON.H -text
 /DISK_SIM.CFG -text
 /DISK_SIM.H -text
 /DISK_SIM.INC -text
@@ -22,10 +26,14 @@
 /EXT32VID.INC -text
 /EXT32VID.VES -text
 /EXT32XMS.INC -text
+/GUI.CPP -text
+/GUI.H -text
 /HELPER.C -text
 /IPL.ASM -text
 /KILL.ME -text
 /MAKEFILE -text
+/MBR.CPP -text
+/MBR.H -text
 /PART.CPP -text
 /PART.H -text
 /PART_AUX.CPP -text

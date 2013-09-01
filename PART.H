@@ -4,6 +4,8 @@
 #include "ext32.h"
 #include "part_vtc.h"
 #include "part_msg.h"
+#include <stddef.h>
+#include "COMMON.H"
 
 #define MT4P /* 
               * To include all the code for supporting More Than 4 Primary 
@@ -62,6 +64,12 @@
 #define LOGICAL(p)       ((p)->flags & P_LOGICAL)
 #define EXTENDED(p)      ((p)->flags & P_EXTENDED)
 #define BTS_LOADED(p)    ((p)->flags & P_BTS_LOADED)
+
+
+
+
+
+
 
 
 typedef struct Part		/* Internal partition record representation */
@@ -453,6 +461,5 @@ char *get_partition_label(DiskInfo *di, Part*p);
 #ifndef PART_TAB_C
   extern struct fs_desc fs_desc[];
 #endif
-
 
 #endif

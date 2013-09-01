@@ -1,5 +1,6 @@
 #define PART_GUI_C
 #include "part.h"
+#include <stddef.h>
 
 #define BORDER_COLOR  (Yellow +BakBlue)
 #define TITLE_COLOR   (BrWhite+BakBlue)
@@ -155,7 +156,6 @@ int dialog_box(char *msg, char *ch1, ... )
 
  return 0;
 }/* dialog_box */
-
 
 void write_int(int attr, int x, int y, int w, int n)
 {
@@ -1270,7 +1270,3 @@ void select_and_copy_part(DiskInfo *src_disk, Part *src_part)
 
  #undef n
 }/* select_and_copy_part */
-
-
-
-

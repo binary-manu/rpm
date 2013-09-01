@@ -1,6 +1,9 @@
 #define   PART_C
 #include "part.h"
 
+#include "GUI.H"
+#include "CMOS.H"
+#include "MBR.H"
 
 #ifndef DISK_SIM
 void ask_and_install_to_floppy(void)
@@ -286,12 +289,130 @@ void partition_manager(int hd)
        }
 #endif
 
-#if 0
-     if( k=='S' || k=='L' )
-       {
-        show_error("Not implemented yet. Please, run \"part -p -r > some_file\" and print it.");
-       }
-#endif
+
+	if( k=='S' || k=='L' )
+	{
+		using namespace MBR;
+		using namespace GUI;
+		
+//		show_error("Not implemented yet. Please, run \"part -p -r > some_file\" and print it.");
+		if (get_detected_os() == 0)
+		{
+			show_error("Can't handle files while running on bare metal");
+			continue;
+		}
+		
+		if (di->changed)
+		{
+			show_error("Before working with the MBR you should either save "
+				"or discard changes");
+			continue;
+		}
+		
+		bool status;
+		char path[256] = {0};
+		size_t n = sizeof path - 1;
+		int res = GUI::MBRDialog(path, &n, &status);
+		
+		if (res == EV_OK && status == true)
+		{
+			if (StoreMBR(path, di->part[0].part_boot_sect) != 0)
+				show_error("Error while saving the MBR");
+		}
+		else if (res == EV_OK && status == false)
+		{
+			int userSays = dialog_box("Do you understand that this can "
+				"potentially DESTROY your data\?",
+				"Yes, old man", "No, err... wait!", static_cast<void*>(0));
+				
+			if (userSays != 1)
+				continue;
+			
+			char mbr[512];
+			if (LoadMBR(path, mbr) != 0)
+			{
+				show_error("An error occurred while reading from file. This is "
+					"not harmful.");
+				continue;
+			}
+			
+			if (write_boot_sect(di, &di->part[0], &mbr, 1) == -1)
+				show_error("PANIC: An error occurred while writing the MBR "
+					"to disk!!!");
+			else
+				FORCE(READ_PART_TABLE);
+			continue;
+		}
+	}
+
+	if (k == 'M') 
+	{
+		using namespace CMOS;
+		using namespace GUI;
+		using namespace MBR;
+		
+		/* CMOS save/restore */
+		if (get_detected_os() == 0)
+		{
+			show_error("Can't handle files while running on bare metal");
+			continue;
+		}
+		
+		bool status;
+		char path[256] = {0};
+		size_t n = sizeof path - 1;
+		RTCTimeSource timeSource;
+		RTCTime theTime(RTCTime::HourRange_24, RTCTime::Format_BCD);
+		int res = CMOSDialog(path, &n, &status, timeSource, &theTime);
+		/* The CMOS data buffer must be at least 512 bytes long even if the
+		actual data are smaller, because the store/load functions always
+		write/read at least 512 bytes */
+		char cmosData[512] = {0};
+		
+		if (res == EV_OK && status == true)
+		{
+			int read = ReadCMOSData(cmosData);
+			if (StoreMBR(path, cmosData) != 0)
+				show_error("Error while saving CMOS data");
+		}
+		else if (res == EV_OK && status == false)
+		{
+			int userSays = dialog_box("This "
+				"will OVERWRITE all yout BIOS settings",
+				"Yes, old man", "No, err... wait!", static_cast<void*>(0));
+				
+			if (userSays != 1)
+				continue;
+			
+			if (LoadMBR(path, cmosData) != 0)
+			{
+				show_error("An error occurred while reading from file. This is "
+					"not harmful.");
+				continue;
+			}
+			RTCTime rtcData((RTCMap*)cmosData);
+			
+			char cmosCurrent[512];
+			ReadCMOSData(cmosCurrent);
+			RTCTime rtcCurrent((RTCMap*)cmosCurrent);
+			
+			rtcData.SetFormat(rtcCurrent.GetFormat());
+			rtcData.SetRange(rtcCurrent.GetRange());
+			theTime.SetFormat(rtcCurrent.GetFormat());
+			theTime.SetRange(rtcCurrent.GetRange());
+			
+			if (timeSource == RTC_USE_USERDATA)
+				RTCTime::CopyTimeDate(rtcData, theTime);
+			else if (timeSource == RTC_KEEP_CMOS)
+				RTCTime::CopyTimeDate(rtcData, rtcCurrent);
+			//memcpy(cmosData, rtcData.GetFlatData(), sizeof(RTCMap) - 2);
+			char *dst = (char*)cmosData;
+			const char *src = (char*)rtcData.GetFlatData();
+			for (int i = 0; i < sizeof(RTCMap) - 2; i++)
+				dst[i] = src[i];
+			WriteCMOSData(cmosData, sizeof cmosData);
+		}
+	}
        
      if( col==1 && k==13 )
        {
@@ -754,4 +875,6 @@ int edit_part_col( Part *p, int col, int mode )
 
  return k;
 }/* edit_part_col */
+
+
 

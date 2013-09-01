@@ -11,6 +11,11 @@ public	hard_disk_verify
 public	floppy_disk_read
 public	floppy_disk_write
 
+PUBLIC	StoreMBR
+PUBLIC	LoadMBR
+PUBLIC	ReadCMOSData
+PUBLIC	WriteCMOSData
+
 disk_info		struc
  hd_flags	dd	?
  hd_num		dd	?
@@ -635,6 +640,242 @@ floppy_disk_write	proc	C	near
 
 floppy_disk_write	endp
 
+PushadButEAX	MACRO
+				push		ebx
+				push		ecx
+				push		edx
+				push		esi
+				push		edi
+				ENDM
+
+PopadButEAX		MACRO
+				pop			edi
+				pop			esi
+				pop			edx
+				pop			ecx
+				pop			ebx
+				ENDM
+
+; Saves a 512 byte data block pointed to by @@data to the file named by @@path.
+; Uses the DOS file functions for writing to files.
+StoreMBR		PROC		C NEAR
+				ARG			@@path:dword, @@data:dword
+				
+				pushfd
+				PushadButEAX
+				
+				; Copy the MBR and the path to the real-mode area
+				; buffer_seg:0000h = MBR
+				; buffer_seg:0200h = Pathname
+				push		es
+				mov			esi, @@data
+				mov			edi, 0
+				push		fs
+				pop			es
+				mov			ecx, 512 / 4
+				cld
+				rep			movsd
+				mov			esi, @@path
+@@NextChar:		lodsb
+				stosb
+				cmp			al, 0
+				jne			@@NextChar
+				pop			es
+				
+				; Create a DOS file
+				mov			eax, 3C00h
+				mov			ecx, 0
+				mov			edx, 512
+				; ES is set to buffer_seg by real_int: no need to set it here
+				rm_int		21h
+				jc			@@Error
+				
+				; Write the MBR to file
+				mov			ebx, eax	; BX = file handle
+				mov			ecx, 512	; CX = bytes to read
+				mov			edx, 0		; DS:DX = I/O buffer
+@@WriteLp:		mov			eax, 4000h
+				rm_int		21h
+				jc			@@BreakLp
+				add			edx, eax
+				sub			ecx, eax
+				jnz			@@WriteLp
+				clc
+@@BreakLp:		setc		al		; Save the return code (CF) to the stack
+				movzx		eax, al
+				push		eax
+				
+				; Close file
+				mov			eax, 3E00h
+				rm_int		21h
+				pop			ecx
+				rcl			ecx, 1
+				jecxz		@@OK
+				
+				
+@@Error:		mov			eax, -1
+				jmp			@@Common
+@@OK:			mov			eax, 0
+@@Common:		PopadButEAX
+				popfd
+				ret
+StoreMBR		ENDP
+
+
+; Loads a 512 byte data block pointed to by @@data with the first 512 bytes
+; from the file named by @@path.
+; Uses the DOS file functions for writing to files.
+LoadMBR			PROC		C NEAR
+				ARG			@@path:dword, @@data:dword
+				
+				pushfd
+				PushadButEAX
+				
+				; Copy the path to the buffer
+				mov			esi, @@path
+				mov			edi, 0
+				push		es
+				push		fs
+				pop			es
+				cld
+@@NextChar:		lodsb
+				stosb
+				test		al, 0FFh
+				jnz			@@NextChar
+				pop			es
+				
+				; Open a DOS file
+				mov			eax, 3D00h
+				mov			edx, 0
+				; ES is set to buffer_seg by real_int: no need to set it here
+				rm_int		21h
+				jc			@@Error
+				
+				; Load the MBR from file to buffer_seg:0000
+				mov			ebx, eax
+				mov			ecx, 512
+				mov			edx, 0
+@@ReadLp:		mov			eax, 3F00h
+				rm_int		21h
+				jc			@@BreakLp
+				add			edx, eax
+				sub			ecx, eax
+				jnz			@@ReadLp
+				clc
+@@BreakLp:		setnc		al		; Save the return code (~CF) to the stack
+				movzx		eax, al
+				push		eax
+				
+				; Close file
+				mov			eax, 3E00h
+				rm_int		21h
+				; NOTE: it is not an error if we can't close the file; even
+				; if it is a waste of resources, no harm can be done by having
+				; a read-only unused file
+				
+				; Now that the file is closed, let's see if there was an error
+				pop			ecx
+				jecxz		@@Error
+				
+				; Now move the loaded data to the real buffer
+				push		ds
+				push		fs
+				pop			ds
+				mov			esi, 0
+				mov			edi, @@data
+				mov			ecx, 512 / 4
+				rep			movsd
+				pop			ds
+				
+@@OK:			mov			eax, 0
+				jmp			@@Common
+@@Error:		mov			eax, -1
+@@Common:		PopadButEAX
+				popfd
+				ret
+LoadMBR			ENDP
+
+
+CMOS_ADDR_PORT	EQU			70h
+CMOS_DATA_PORT	EQU			71h
+CMOS_DATA_DELAY	EQU			10000h
+CMOS_XFER_BYTES	EQU			128
+NMI_DISABLE_MSK	EQU			80h
+
+ReadCMOSData	PROC		C NEAR
+				ARG			@@path:dword
+				
+				; Save all GP registers & flags, but not EAX
+				pushfd
+				PushadButEAX
+				cli
+				cld
+				
+				; ES:EDI points to a buffer where CMOS data are stored
+				mov			edi, @@path
+				push		es
+				push		ds
+				pop			es
+				
+				; Wait for the RTC to be in non-update state
+@@WaitForRTC:	mov			al, 0Ah + NMI_DISABLE_MSK
+				out			CMOS_ADDR_PORT, al
+				mov			ecx, CMOS_DATA_DELAY
+@@Here1:		loop		@@Here1
+				in			al, CMOS_DATA_PORT
+				test		al, 80h
+				jnz			@@WaitForRTC
+				
+				
+				mov			eax, NMI_DISABLE_MSK
+@@CMOSByte:		out			CMOS_ADDR_PORT, al
+				push		eax
+				mov			ecx, CMOS_DATA_DELAY
+@@Here:			loop		@@Here
+				in			al, CMOS_DATA_PORT
+				stosb
+				pop			eax
+				inc			eax
+				cmp			eax, CMOS_XFER_BYTES + NMI_DISABLE_MSK
+				jne			@@CMOSByte
+				
+				; Enable NMI
+				xor			al, al
+				out			CMOS_ADDR_PORT, al
+				
+				pop			es
+				PopadButEAX
+				popfd
+				ret
+ReadCMOSData	ENDP
+
+WriteCMOSData	PROC		C NEAR
+				ARG			@@path:dword
+				ARG			@@size:dword
+				
+				pushfd
+				PushadButEAX
+				
+				cli
+				cld
+				mov			esi, @@path
+				mov			eax, NMI_DISABLE_MSK
+				
+@@CMOSByte:		out			CMOS_ADDR_PORT, al
+				push		eax
+				mov			ecx, CMOS_DATA_DELAY
+@@Here:			loop		@@Here
+				lodsb
+				out			CMOS_DATA_PORT, al
+				pop			eax
+				inc			eax
+				cmp			eax, CMOS_XFER_BYTES + NMI_DISABLE_MSK
+				jne			@@CMOSByte
+				
+				PopadButEAX
+				popfd
+				ret
+WriteCMOSData	ENDP
 ;----------------------------------------------------------------------
 _TEXT 		ends
 ;----------------------------------------------------------------------

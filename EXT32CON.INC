@@ -16,6 +16,7 @@ public	save_window
 public	load_window
 public	clear_window
 public	border_window
+public	WriteString
 
 ;----------------------------------------------------------------------
 _TEXT 		segment			; 32-bit protected mode code
@@ -222,6 +223,49 @@ write_string	proc	C 	near
 		ret
 
 write_string	endp
+
+WriteString			proc		C near
+
+		arg	@@attr: dword, @@x: dword, @@y: dword, @@s:dword, @@n:dword
+
+		push	esi
+		push	edi
+		push	ecx
+		
+		mov ecx, @@n
+		mov	ah, byte ptr @@attr
+		mov	esi, @@s
+		mov	edi, @@y
+		dec	edi
+		imul	edi, 80		; chars per row
+		add	edi, @@x
+		dec	edi
+		shl	edi, 1		; two bytes per char
+
+		push	es
+		mov	es, video_sel
+		cld
+		jmp	@@read
+    @@write:
+    	cmp	edi, 4000	; max screen length 
+    	ja	@@exit
+		stosw
+    @@read:
+		jecxz @@exit
+		dec ecx
+		lodsb
+		cmp	al, 0
+		jne	@@write
+    @@exit:
+		pop	es
+
+		pop ecx
+		pop	edi
+		pop	esi
+
+		ret
+
+WriteString			endp
 
 ;----------------------------------------------------------------------
 

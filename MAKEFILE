@@ -43,6 +43,8 @@ PART_OBJ = ipl.obj boot_f1x.obj bmboot.obj \
 		part_fat.obj part_gui.obj part_msg.obj part_tab.obj \
 		part_vtc.obj part_wiz.obj part_zip.obj
 
+ADDON_OBJ = GUI.OBJ CMOS.OBJ MBR.OBJ COMMON.OBJ
+		
 PCMD_OBJ = part_cmd.obj ipl.obj boot_f1x.obj \
            part_aux.obj part_dsk.obj part_fat.obj part_tab.obj
 
@@ -63,6 +65,7 @@ ext32.obj: ext32.asm ext32con.inc ext32dsk.inc ext32dos.inc ext32msc.inc \
 $(PART_OBJ):: ext32.h part.h part_msg.h part_vtc.h disk_sim.h
 #$(PCMD_OBJ):: ext32.h graph.h window.h part.h part_msg.h part_vtc.h disk_sim.h
 #$(BOOT_OBJ):: ext32.h graph.h window.h part.h part_msg.h part_vtc.h
+$(ADDON_OBJ):: CMOS.H GUI.H MBR.H COMMON.H
 
 part_dsk.obj:: disk_sim.inc
 
@@ -75,9 +78,9 @@ boot.exe: $(EXT_OBJ) $(WIN_OBJ) $(BOOT_OBJ)
 
 
 #$(WIN_OBJ)
-part.exe: $(EXT_OBJ) $(PART_OBJ)
+part.exe: $(EXT_OBJ) $(PART_OBJ) $(ADDON_OBJ)
 	$(LD) @&&!
-	  $(EXT_OBJ) $(PART_OBJ)
+	  $(EXT_OBJ) $(PART_OBJ) $(ADDON_OBJ)
 	  part.exe
 !
 	helper -fix_exe part.exe
@@ -104,7 +107,7 @@ part_msg.h part_msg.c: part_msg.msg
 	helper -fix_asm part_msg.asx
 	$(AS) part_msg.asx
 
-$(LNG):	$(EXT_OBJ) $(WIN_OBJ) $(PART_OBJ)
+$(LNG):	$(EXT_OBJ) $(WIN_OBJ) $(PART_OBJ) $(ADDON_OBJ)
 	helper -exp_msg $@ part_msg.c part_msg.h
 	$(CC) -opart_msg.asx part_msg.c
 	helper -fix_asm  part_msg.asx
@@ -116,7 +119,7 @@ $(LNG):	$(EXT_OBJ) $(WIN_OBJ) $(PART_OBJ)
 	del part_msg.obj
 
 helper.exe: helper.c
-	tcc helper.c
+	bcc32 helper.c
 	del helper.obj
 
 zip: en
