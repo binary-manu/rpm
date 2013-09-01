@@ -5,7 +5,7 @@
 # If you think that some messages don't need to be translated,
 # just skip them, and english version will be used by default.
 
-#define VERSION "2.44 (beta) by Muthu  June 09, 2002"
+#define VERSION "2.45 (beta) by Manu  August 05, 2010"
 
 PROGRAM_TITLE
 
