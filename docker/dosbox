@@ -1,0 +1,22 @@
+#!/bin/sh
+
+(
+    # Patcxh the configuration file to add explicit mounts for T: and S:
+    while [ $# -ge 2 ]; do
+        if [ "$1" = "-conf" ]; then
+            CONF="$2"
+            break
+        fi
+        shift
+    done
+
+    {
+        head -1 "$CONF"
+        echo "mount s $SOURCEDIR"
+        echo "mount t $TOOLSDIR"
+        tail -n +2 "$CONF"
+    } > "$CONF.$$"
+    mv "$CONF.$$" "$CONF"
+)
+
+"$REALDOSBOX" "$@"
