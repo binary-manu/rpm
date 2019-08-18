@@ -5,3 +5,5 @@ del *.obj
 del *.asx
 del part_msg.c
 del part_msg.h
+del part.exe
+del helper.exe
