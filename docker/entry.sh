@@ -11,4 +11,4 @@ cd "$WINEPREFIX/dosdevices"
 [ ! -e 's:' ] && ln -s $SOURCEDIR 's:'
 
 cd "$SOURCEDIR"
-wine make "$@"
+wine make "$@" > "$BUILDLOG"

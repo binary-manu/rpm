@@ -14,7 +14,8 @@ ENV SDL_VIDEODRIVER=dummy \
     WINEPREFIX=/tmp/home/.wine \
     REALDOSBOX=/usr/bin/dosbox
 
-ENV WINEPATH=$TOOLSDIR/BC5/BIN
+ENV WINEPATH=$TOOLSDIR/BC5/BIN \
+    BUILDLOG=$SOURCEDIR/BUILD.LOG
 
 COPY entry.sh /entry.sh
 COPY dosbox /usr/local/bin/dosbox

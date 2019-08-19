@@ -1,7 +1,14 @@
 #!/bin/sh
 
+PID=$$
+TMP_LOG="DOS$(echo $PID | tail -c 5).LOG"
+TMP_CONF="/tmp/CNF$PID.LOG"
+
+trap "rm -f $SOURCEDIR/$TMP_LOG $TMP_CONF" SIGTERM SIGQUIT SIGINT
+
 (
-    # Patcxh the configuration file to add explicit mounts for T: and S:
+    # Patch the configuration file to add explicit mounts for T: and S:
+    # Also add output redirection for the real command
     while [ $# -ge 2 ]; do
         if [ "$1" = "-conf" ]; then
             CONF="$2"
@@ -10,13 +17,17 @@
         shift
     done
 
-    {
-        head -1 "$CONF"
-        echo "mount s $SOURCEDIR"
-        echo "mount t $TOOLSDIR"
-        tail -n +2 "$CONF"
-    } > "$CONF.$$"
-    mv "$CONF.$$" "$CONF"
+    if [ -n "$CONF" ]; then
+        {
+            head -1 "$CONF"
+            echo "mount s $SOURCEDIR"
+            echo "mount t $TOOLSDIR"
+            tail -n +2 "$CONF"
+        } | sed -e 's/^\(T:\\[^[:blank:]]*\.EXE .*\)$/\1 >> S:\\'"$TMP_LOG"'/i' > "$TMP_CONF"
+        mv "$TMP_CONF" "$CONF"
+    fi
 )
 
-"$REALDOSBOX" "$@"
+"$REALDOSBOX" "$@" >&2
+cat "$SOURCEDIR/$TMP_LOG"
+rm "$SOURCEDIR/$TMP_LOG"
