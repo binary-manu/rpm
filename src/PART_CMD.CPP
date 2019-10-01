@@ -1,5 +1,6 @@
 #define PART_CMD_CPP
 #include "part.h"
+#include "MBR.H"
 
 //#define SCAN_OPT
 
@@ -242,6 +243,8 @@ void cmd_line(int argc, char **argv) // argc>0 is true
 #define CMD_FORMAT     3
 #define CMD_ACTIVATE   4
 #define CMD_UPDATE_MBR 5
+#define CMD_MBR_STORE  6
+#define CMD_MBR_LOAD   7
 
 #define FAT_TYPE_ANY      0
 #define FAT_TYPE_FAT16    1
@@ -274,6 +277,7 @@ int process_line(int line_num,int argc, char**argv)
  int size_type_pcent=0;
  int fat_type=FAT_TYPE_ANY;
  int disk_spec=0;
+ const char *filename = 0;
 
  int no_del_count=0, no_del_type[MAX_TYPE_COUNT];
  
@@ -513,6 +517,18 @@ int process_line(int line_num,int argc, char**argv)
               }
            }
        }
+     else if( strncmpi(arg,"mbs",3)==0 )
+       {
+        command=CMD_MBR_STORE;
+       }
+     else if( strncmpi(arg,"mbl",3)==0 )
+       {
+        command=CMD_MBR_LOAD;
+       }
+     else if( strncmpi(arg,"f:",2)==0 )
+       {
+        filename = arg+2;
+       }
      else
        {
         printf("\r\nERROR: Unknown command in line (%d): \"%s\"\r\n",line_num,argv[0]);
@@ -640,6 +656,35 @@ int process_line(int line_num,int argc, char**argv)
        exit(1);
       }
     create_partition(di, part_type, part_size, fat_type, format, label);
+   }
+ else if( command==CMD_MBR_STORE )
+   {
+    if(!filename)
+      {
+       printf("ERROR: \"/MBS\" requires a file name: /F:filename\n");
+       exit(1);
+      }
+    if (MBR::StoreMBR(filename, di->part[0].part_boot_sect) != 0) {
+      printf("ERROR: unable to save the MBR to '%s'\n", filename);
+      exit(1);
+    }
+   }
+ else if( command==CMD_MBR_LOAD )
+   {
+      if(!filename) {
+        printf("ERROR: \"/MBL\" requires a file name: /F:filename\n");
+        exit(1);
+      }
+			char mbr[512];
+			if (MBR::LoadMBR(filename, mbr) != 0) {
+        printf("ERROR: unable to load the MBR from '%s'\n", filename);
+        exit(1);
+			}
+			
+			if (write_boot_sect(di, &di->part[0], &mbr, 1) == -1) {
+        printf("ERROR: unable to write the MBR to disk\n");
+        exit(1);
+      }
    }
 
  if( debug )
