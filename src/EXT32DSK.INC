@@ -851,7 +851,6 @@ ReadCMOSData	ENDP
 
 WriteCMOSData	PROC		C NEAR
 				ARG			@@path:dword
-				ARG			@@size:dword
 				
 				pushfd
 				PushadButEAX

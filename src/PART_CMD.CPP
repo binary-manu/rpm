@@ -99,7 +99,7 @@ void usage(void)
  "/MBS /F:FILENAME - Save MBR to FILENAME\r\n"
  "/MBL /F:FILENAME - Load MBR from FILENAME\r\n"
  "/CMS /F:FILENAME - Save CMOS to FILENAME\r\n"
- "/CML /F:FILENAME [/T:YYYY-MM-DD-HH-MM-SS|/T] - Load MBR from FILENAME\r\n"
+ "/CML /F:FILENAME [/T:YYYY-MM-DD-HH-MM-SS|/T:] - Load MBR from FILENAME\r\n"
 #endif
 #if 0
  "Commands: disk-no - hard disk number, valid values are 1..8\r\n"
@@ -247,6 +247,7 @@ void cmd_line(int argc, char **argv) // argc>0 is true
 #define CMD_MBR_STORE  6
 #define CMD_MBR_LOAD   7
 #define CMD_CMOS_STORE 8
+#define CMD_CMOS_LOAD  9
 
 #define FAT_TYPE_ANY      0
 #define FAT_TYPE_FAT16    1
@@ -280,6 +281,7 @@ int process_line(int line_num,int argc, char**argv)
  int fat_type=FAT_TYPE_ANY;
  int disk_spec=0;
  const char *filename = 0;
+ const char *dateTime = 0;
 
  int no_del_count=0, no_del_type[MAX_TYPE_COUNT];
  
@@ -531,9 +533,17 @@ int process_line(int line_num,int argc, char**argv)
        {
         command=CMD_CMOS_STORE;
        }
+     else if( strncmpi(arg,"cml",3)==0 )
+       {
+        command=CMD_CMOS_LOAD;
+       }
      else if( strncmpi(arg,"f:",2)==0 )
        {
         filename = arg+2;
+       }
+     else if( strncmpi(arg,"t:",2)==0 )
+       {
+        dateTime = arg+2;
        }
      else
        {
@@ -703,6 +713,65 @@ int process_line(int line_num,int argc, char**argv)
     CMOS::ReadCMOSData(cmosData);
     if (MBR::StoreMBR(filename, cmosData) != 0) {
       printf("ERROR: unable to save CMOS data to '%s'\n", filename);
+      exit(1);
+    }
+   }
+ else if( command==CMD_CMOS_LOAD )
+   {
+    if(!filename)
+      {
+       printf("ERROR: \"/CML\" requires a file name: /F:filename\n");
+       exit(1);
+      }
+
+    CMOS::RTCTimeSource timeSource = CMOS::RTC_USE_USERDATA;
+    CMOS::RTCTime time;
+    if (!dateTime) {
+      timeSource = CMOS::RTC_KEEP_CMOS;
+    } else if (*dateTime == '\0') {
+      timeSource = CMOS::RTC_USE_SAVED;
+    } else {
+			if (strlen(dateTime) != 2 * 6 + 5) {
+				printf("ERROR: wrong date/time '%s'\n", dateTime);
+				exit(1);
+			}
+
+			char val;
+			int ok = 1;
+      time.SetFormat(CMOS::RTCTime::Format_Binary);
+      time.SetRange(CMOS::RTCTime::HourRange_24);
+
+			ok &= CMOS::ToTimeItem(dateTime, 2, &val);
+			dateTime += 3;
+      time.SetYear(val);
+
+			ok &= CMOS::ToTimeItem(dateTime, 2, &val);
+			dateTime += 3;
+      time.SetMonth(val);
+
+			ok &= CMOS::ToTimeItem(dateTime, 2, &val);
+			dateTime += 3;
+      time.SetDay(val);
+
+			ok &= CMOS::ToTimeItem(dateTime, 2, &val);
+			dateTime += 3;
+      time.SetHour(val);
+
+			ok &= CMOS::ToTimeItem(dateTime, 2, &val);
+			dateTime += 3;
+      time.SetMinutes(val);
+
+			ok &= CMOS::ToTimeItem(dateTime, 2, &val);
+      time.SetSeconds(val);
+
+			if (!ok) {
+				printf("ERROR: wrong date/time '%s'\n", dateTime);
+				exit(1);
+			}
+    }
+
+    if (CMOS::ReadPatchAndWriteCMOSData(filename, timeSource, time) != 0) {
+      printf("ERROR: unable to load CMOS data from '%s'\n", filename);
       exit(1);
     }
    }

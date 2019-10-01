@@ -1,4 +1,5 @@
 #include "CMOS.H"
+#include "MBR.H"
 
 void CMOS::PatchCMOSTimeDate(void* cmosData, const RTCTime& time)
 {
@@ -231,4 +232,51 @@ void CMOS::RTCTime::CopyTimeDate(RTCTime &dst, const RTCTime& src)
 	dst.SetDay(src.GetDay());
 	dst.SetMonth(src.GetMonth());
 	dst.SetYear(src.GetYear());
+}
+
+int CMOS::ReadPatchAndWriteCMOSData(
+	const char *path,
+	RTCTimeSource timeSource,
+	RTCTime newTime)
+{
+	char cmosData[512];
+	if (MBR::LoadMBR(path, cmosData) != 0)
+	{
+		return -1;
+	}
+	RTCTime rtcData((RTCMap *)cmosData);
+
+	char cmosCurrent[512];
+	ReadCMOSData(cmosCurrent);
+	RTCTime rtcCurrent((RTCMap *)cmosCurrent);
+
+	rtcData.SetFormat(rtcCurrent.GetFormat());
+	rtcData.SetRange(rtcCurrent.GetRange());
+
+	if (timeSource == RTC_USE_USERDATA) {
+		newTime.SetFormat(rtcCurrent.GetFormat());
+		newTime.SetRange(rtcCurrent.GetRange());
+		RTCTime::CopyTimeDate(rtcData, newTime);
+	}
+	else if (timeSource == RTC_KEEP_CMOS) {
+		RTCTime::CopyTimeDate(rtcData, rtcCurrent);
+	}
+	char *dst = (char *)cmosData;
+	const char *src = (char *)rtcData.GetFlatData();
+	for (int i = 0; i < sizeof(RTCMap) - 2; i++)
+		dst[i] = src[i];
+	WriteCMOSData(cmosData);
+	return 0;
+}
+
+bool CMOS::ToTimeItem(const char* text, size_t len, char* value) {
+	int res = 0;
+	for (int i = 0; i < len; i++)
+	{
+		if (text[i] < '0' || text[i] > '9')
+			return false;
+		res = res * 10 + (text[i] - '0');
+	}
+	*value = res;
+	return true;
 }

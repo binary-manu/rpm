@@ -1,6 +1,7 @@
 #ifndef _CMOS_H_
 #define _CMOS_H_
 
+#include <stddef.h>
 #include "COMMON.H"
 
 namespace CMOS
@@ -99,9 +100,15 @@ namespace CMOS
 	};
 	
 	extern "C" int ReadCMOSData(void *buffer);
-	extern "C" void WriteCMOSData(void *buffer, int size);
+	extern "C" void WriteCMOSData(const void *buffer);
 	void PatchCMOSTimeDate(void* cmosData, const CMOS::RTCTime& time);
 	void CopyCMOSTimeDate(void* cmosData, const void* cmosSrc);
+	int ReadPatchAndWriteCMOSData(
+		const char *path,
+		RTCTimeSource timeSource,
+		RTCTime newTime = RTCTime()
+	);
+	bool ToTimeItem(const char* text, size_t len, char* value);
 }
 
 #endif

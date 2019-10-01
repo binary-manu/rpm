@@ -457,19 +457,6 @@ bool GUI::RadioButton::Handle(const Event &ev)
 	return false;
 }
 
-bool ToTimeItem(const char* text, size_t len, char* value)
-{
-	int res = 0;
-	for (int i = 0; i < len; i++)
-	{
-		if (text[i] < '0' || text[i] > '9')
-			return false;
-		res = res * 10 + (text[i] - '0');
-	}
-	*value = res;
-	return true;
-}
-
 int GUI::CMOSDialog(char *path, size_t *sz, bool *store, CMOS::RTCTimeSource& tmsrc,
 	CMOS::RTCTime *time)
 {

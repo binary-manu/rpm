@@ -384,33 +384,11 @@ void partition_manager(int hd)
 			if (userSays != 1)
 				continue;
 			
-			if (LoadMBR(path, cmosData) != 0)
-			{
+      if (CMOS::ReadPatchAndWriteCMOSData(path, timeSource, theTime) != 0) {
 				show_error("An error occurred while reading from file. This is "
 					"not harmful.");
 				continue;
-			}
-			RTCTime rtcData((RTCMap*)cmosData);
-			
-			char cmosCurrent[512];
-			ReadCMOSData(cmosCurrent);
-			RTCTime rtcCurrent((RTCMap*)cmosCurrent);
-			
-			rtcData.SetFormat(rtcCurrent.GetFormat());
-			rtcData.SetRange(rtcCurrent.GetRange());
-			theTime.SetFormat(rtcCurrent.GetFormat());
-			theTime.SetRange(rtcCurrent.GetRange());
-			
-			if (timeSource == RTC_USE_USERDATA)
-				RTCTime::CopyTimeDate(rtcData, theTime);
-			else if (timeSource == RTC_KEEP_CMOS)
-				RTCTime::CopyTimeDate(rtcData, rtcCurrent);
-			//memcpy(cmosData, rtcData.GetFlatData(), sizeof(RTCMap) - 2);
-			char *dst = (char*)cmosData;
-			const char *src = (char*)rtcData.GetFlatData();
-			for (int i = 0; i < sizeof(RTCMap) - 2; i++)
-				dst[i] = src[i];
-			WriteCMOSData(cmosData, sizeof cmosData);
+      }
 		}
 	}
        
