@@ -1,6 +1,7 @@
 #define PART_CMD_CPP
 #include "part.h"
 #include "MBR.H"
+#include "CMOS.H"
 
 //#define SCAN_OPT
 
@@ -245,6 +246,7 @@ void cmd_line(int argc, char **argv) // argc>0 is true
 #define CMD_UPDATE_MBR 5
 #define CMD_MBR_STORE  6
 #define CMD_MBR_LOAD   7
+#define CMD_CMOS_STORE 8
 
 #define FAT_TYPE_ANY      0
 #define FAT_TYPE_FAT16    1
@@ -525,6 +527,10 @@ int process_line(int line_num,int argc, char**argv)
        {
         command=CMD_MBR_LOAD;
        }
+     else if( strncmpi(arg,"cms",3)==0 )
+       {
+        command=CMD_CMOS_STORE;
+       }
      else if( strncmpi(arg,"f:",2)==0 )
        {
         filename = arg+2;
@@ -685,6 +691,20 @@ int process_line(int line_num,int argc, char**argv)
         printf("ERROR: unable to write the MBR to disk\n");
         exit(1);
       }
+   }
+ else if( command==CMD_CMOS_STORE )
+   {
+    if(!filename)
+      {
+       printf("ERROR: \"/CMS\" requires a file name: /F:filename\n");
+       exit(1);
+      }
+    char cmosData[512] = {0};
+    CMOS::ReadCMOSData(cmosData);
+    if (MBR::StoreMBR(filename, cmosData) != 0) {
+      printf("ERROR: unable to save CMOS data to '%s'\n", filename);
+      exit(1);
+    }
    }
 
  if( debug )
