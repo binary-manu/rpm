@@ -94,6 +94,10 @@ void usage(void)
  "/DEL /P:partition-no |/PRI[:nth] |/LOG[:nth] |/EXT |/ALL\r\n"
  "/FOR /P:partition-no |/PRI[:nth] |/LOG[:nth] [/V:label]\r\n"
  "/CRE [/PRI |/EXT |/LOG] [/SZ:mb|pcnt%%] [/FOR [/V:label]] [/NTFAT16|/FAT16|/FAT32|/NTFS]\r\n"
+ "/MBS /F:FILENAME - Save MBR to FILENAME\r\n"
+ "/MBL /F:FILENAME - Load MBR from FILENAME\r\n"
+ "/CMS /F:FILENAME - Save CMOS to FILENAME\r\n"
+ "/CML /F:FILENAME [/T:YYYY-MM-DD-HH-MM-SS|/T] - Load MBR from FILENAME\r\n"
 #endif
 #if 0
  "Commands: disk-no - hard disk number, valid values are 1..8\r\n"
@@ -829,9 +833,9 @@ void sprintf_partition_header(char *header, DiskInfo *di,int index)
 
  if( LOGICAL(p) ) {
 	if( EXTENDED(p) ) {
-      sprintf(header,scan?"\t%s\tExt\t\t":"%s ÆExt   ",tmp1);
+      sprintf(header,scan?"\t%s\tExt\t\t":"%s ï¿½Ext   ",tmp1);
 	} else {
-      sprintf(header,scan?"\t%s\tLog\t%s\t":"%s Ã Log%s",tmp1, tmp2+((x>9)?1:0));
+      sprintf(header,scan?"\t%s\tLog\t%s\t":"%s ï¿½ Log%s",tmp1, tmp2+((x>9)?1:0));
 	}
  } else { 
 #ifdef SCAN_OPT
