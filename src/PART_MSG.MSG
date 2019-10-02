@@ -5,7 +5,7 @@
 # If you think that some messages don't need to be translated,
 # just skip them, and english version will be used by default.
 
-#define VERSION "2.45 (beta) by Manu  August 05, 2010"
+#define VERSION "2.46   github.com/binary-manu/rpm"
 
 PROGRAM_TITLE
 
@@ -706,7 +706,7 @@ GUI_HELP_TEXT
 "S - Alias for L\n"
 "M - Load/save CMOS setting from/to file\n\n"
 "Run \"part -help\" for command line options\n\n"
-"For more information go to: www.ranish.com/part\n"
+"For more information: github.com/binary-manu/rpm\n"
 #"T - Scan disk for lost partitions (not implemented yet)\n\n"
 
 #-STOP-#
