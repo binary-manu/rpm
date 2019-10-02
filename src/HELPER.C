@@ -287,6 +287,7 @@ void merge_msgs(FILE *inpf, FILE *outpf, char *lang)
 {
  int i;
  char *p, tmp[80];
+ (void)lang;
 
  while(1)
     {

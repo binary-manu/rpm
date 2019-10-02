@@ -343,7 +343,7 @@ bool GUI::IsCharASCIIPrintable(char c)
 	return c >= 0x20 && c <= 0x7E;
 }
 
-GUI::AbstractExclusiveItem::AbstractExclusiveItem(ExclusiveGroup& group)
+GUI::AbstractExclusiveItem::AbstractExclusiveItem(GUI::ExclusiveGroup& group)
 {
 	Group(group);
 	mIsChecked = false;
@@ -355,12 +355,12 @@ bool GUI::AbstractExclusiveItem::Checked() const
 }
 
 
-void GUI::AbstractExclusiveItem::Checked(bool checked)
+void GUI::AbstractExclusiveItem::SetChecked(bool checked)
 {
 	mIsChecked = checked;
 }
 
-void GUI::AbstractExclusiveItem::Group(ExclusiveGroup& group)
+void GUI::AbstractExclusiveItem::Group(GUI::ExclusiveGroup& group)
 {
 	mGroup = &group;
 	mGroup->AddItem(*this);
@@ -385,19 +385,19 @@ GUI::ExclusiveItem* GUI::ExclusiveGroup::CurrentSelection() const
 	return 0;
 }
 
-void GUI::ExclusiveGroup::Notify(ExclusiveItem& changedItem, bool newState)
+void GUI::ExclusiveGroup::Notify(GUI::ExclusiveItem& changedItem, bool newState)
 {
 	if (newState)
 	{
 		if (CurrentSelection() != 0)
-			CurrentSelection()->Checked(false);
-		changedItem.Checked(true);
+			CurrentSelection()->SetChecked(false);
+		changedItem.SetChecked(true);
 	}
 	else
-		changedItem.Checked(false);
+		changedItem.SetChecked(false);
 }
 
-void GUI::ExclusiveGroup::AddItem(ExclusiveItem& item)
+void GUI::ExclusiveGroup::AddItem(GUI::ExclusiveItem& item)
 {
 	int i;
 	for (i = 0; i < DEFAULT_NITEMS && mItems[i] != 0; i++);
@@ -405,7 +405,7 @@ void GUI::ExclusiveGroup::AddItem(ExclusiveItem& item)
 		mItems[i] = &item;
 	else
 		return;
-	item.Checked(false);
+	item.SetChecked(false);
 }
 
 
@@ -419,9 +419,9 @@ void GUI::RadioButton::Draw() const
 	write_string(GR_TEXT_COLOR, x + 3, y, message);
 }
 
-void GUI::RadioButton::Checked(bool newState)
+void GUI::RadioButton::SetChecked(bool newState)
 {
-	AbstractExclusiveItem::Checked(newState);
+	AbstractExclusiveItem::SetChecked(newState);
 	Draw();
 }
 
@@ -429,7 +429,7 @@ GUI::RadioButton::~RadioButton()
 {
 }
 
-GUI::RadioButton::RadioButton(ExclusiveGroup& grp, int x, int y, char *msg):
+GUI::RadioButton::RadioButton(GUI::ExclusiveGroup& grp, int x, int y, char *msg):
 AbstractExclusiveItem(grp), x(x), y(y), message(msg)
 {
 }
@@ -447,7 +447,7 @@ bool GUI::RadioButton::Focus() const
 	return hasFocus;
 }
 
-bool GUI::RadioButton::Handle(const Event &ev)
+bool GUI::RadioButton::Handle(const GUI::Event &ev)
 {
 	if (ev.source == Event::Keyboard && ev.kbd.key == KeySpace)
 	{

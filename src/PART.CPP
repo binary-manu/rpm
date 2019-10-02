@@ -362,13 +362,13 @@ void partition_manager(int hd)
 		char path[256] = {0};
 		size_t n = sizeof path - 1;
 		RTCTimeSource timeSource;
-		RTCTime theTime(RTCTime::HourRange_24, RTCTime::Format_BCD);
+		RTCTime theTime(RTCTime::Format_BCD, RTCTime::HourRange_24);
 		int res = CMOSDialog(path, &n, &status, timeSource, &theTime);
 		char cmosData[CMOS_BUFFER_SIZE] = {0};
 		
 		if (res == EV_OK && status == true)
 		{
-			int read = ReadCMOSData(cmosData);
+			ReadCMOSData(cmosData);
 			if (StoreMBR(path, cmosData) != 0)
 				show_error("Error while saving CMOS data");
 		}

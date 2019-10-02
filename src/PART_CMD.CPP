@@ -56,6 +56,8 @@ int ATOIX(char *p)
 
 void start_cmd(int hd, int argc, char **argv)
 {
+ (void)hd;
+
  cmd_line_mode=1;
  if( argc>=2 && argv[1][0]!=0 )
    {

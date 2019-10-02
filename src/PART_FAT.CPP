@@ -108,10 +108,11 @@ struct boot_fat32
 
 int fat_handler(int op, DiskInfo *di, Part *p, char **argv)
 {
+ (void)argv;
+
  int i, sys, color;
  FatInfo *fi;
  struct boot_fat16 *f16;
- struct boot_fat32 *f32;
  Sector rel, num;
 
  if( op==OP_FORMAT ) 
@@ -129,7 +130,6 @@ int fat_handler(int op, DiskInfo *di, Part *p, char **argv)
    }
 
  f16 = (struct boot_fat16 *)(p->part_boot_sect);
- f32 = (struct boot_fat32 *)(p->part_boot_sect);
 
  if( p->part_misc_info==0 )
    {
@@ -189,6 +189,8 @@ void bgview_fat_details(HardDiskInfo *di, Part *p, FatInfo *fi, int act)
 
 void update_fat_info(HardDiskInfo *di, Part *p, FatInfo *fi)
 {
+ (void)di;
+
  unsigned long x;
  struct boot_fat16 *f16;
  struct boot_fat32 *f32;
@@ -247,8 +249,6 @@ void update_fat_info(HardDiskInfo *di, Part *p, FatInfo *fi)
  fi->min_num_sect = fi->first_data_sect + fi->clust_size;
 
 
- // if( fi->fat_size<0 ) fi->fat_size=0; // fat_size is unsigned 
- if( fi->fat_size<0 ) fi->fat_size=0;
  x=fi->fat_size;
  if( fi->sys==16 && x>256 ) /* Fat size cannot be more than 128k (256 sect) */
    x=256;
@@ -386,6 +386,8 @@ void save_fat_boot_sect(HardDiskInfo *di, Part *p, FatInfo *fi)
 
 void fat_format(HardDiskInfo *di, Part *p, FatInfo *fi)
 {
+ (void)fi;
+
  int i, x=0;
  Sector *bbt=0;
  

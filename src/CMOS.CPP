@@ -175,7 +175,7 @@ mFormat(fmt), mRange(range)
 }
 		
 
-void CMOS::RTCTime::CreateHelper(const RTCMap *map)
+void CMOS::RTCTime::CreateHelper(const CMOS::RTCMap *map)
 {
 	SetSeconds(map->mSeconds);
 	SetMinutes(map->mMinutes);
@@ -188,13 +188,13 @@ void CMOS::RTCTime::CreateHelper(const RTCMap *map)
 	SetHourAlarm(map->mHoursAlarm);
 }
 		
-CMOS::RTCTime::RTCTime(const RTCMap *map, Format fmt, HourRange range):
+CMOS::RTCTime::RTCTime(const CMOS::RTCMap *map, Format fmt, HourRange range):
 mFormat(fmt), mRange(range)
 {
 	CreateHelper(map);
 }
 
-CMOS::RTCTime::RTCTime(const RTCMap *map)
+CMOS::RTCTime::RTCTime(const CMOS::RTCMap *map)
 {
 	mFormat = (map->mRegB & 4) ? Format_Binary : Format_BCD;
 	mRange = (map->mRegB & 2) ? HourRange_24 : HourRange_12;
@@ -224,7 +224,7 @@ void CMOS::RTCTime::UpdateDOW()
 	mMap.mDOW = 1 + dow(BaseYear + GetYear(), GetMonth(), GetDay());
 }
 
-void CMOS::RTCTime::CopyTimeDate(RTCTime &dst, const RTCTime& src)
+void CMOS::RTCTime::CopyTimeDate(CMOS::RTCTime &dst, const CMOS::RTCTime& src)
 {
 	dst.SetSeconds(src.GetSeconds());
 	dst.SetMinutes(src.GetMinutes());
@@ -271,7 +271,7 @@ int CMOS::ReadPatchAndWriteCMOSData(
 
 bool CMOS::ToTimeItem(const char* text, size_t len, char* value) {
 	int res = 0;
-	for (int i = 0; i < len; i++)
+	for (size_t i = 0; i < len; i++)
 	{
 		if (text[i] < '0' || text[i] > '9')
 			return false;

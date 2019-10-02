@@ -142,7 +142,7 @@ namespace GUI
 	class ExclusiveItem {
 	public:
 		virtual bool Checked() const = 0;
-		virtual void Checked(bool checked) = 0;
+		virtual void SetChecked(bool checked) = 0;
 		virtual void Group(ExclusiveGroup& group) = 0;
 		virtual ExclusiveGroup& Group() const = 0;
 		virtual ~ExclusiveItem() {}
@@ -152,7 +152,7 @@ namespace GUI
 	public:
 		AbstractExclusiveItem(ExclusiveGroup& group);
 		virtual bool Checked() const;
-		virtual void Checked(bool checked);
+		virtual void SetChecked(bool checked);
 		virtual void Group(ExclusiveGroup& group);
 		virtual ExclusiveGroup& Group() const;
 			
@@ -197,9 +197,7 @@ namespace GUI
 		bool Focus(bool got);
 		bool Focus() const;
 		bool Handle(const Event &ev);
-		
-		using AbstractExclusiveItem::Checked;
-		void Checked(bool newState);
+		void SetChecked(bool newState);
 	};
 	
 	
