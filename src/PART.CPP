@@ -328,7 +328,7 @@ void partition_manager(int hd)
 			if (userSays != 1)
 				continue;
 			
-			char mbr[512];
+			char mbr[MBR_BUFFER_SIZE];
 			if (LoadMBR(path, mbr) != 0)
 			{
 				show_error("An error occurred while reading from file. This is "
@@ -364,10 +364,7 @@ void partition_manager(int hd)
 		RTCTimeSource timeSource;
 		RTCTime theTime(RTCTime::HourRange_24, RTCTime::Format_BCD);
 		int res = CMOSDialog(path, &n, &status, timeSource, &theTime);
-		/* The CMOS data buffer must be at least 512 bytes long even if the
-		actual data are smaller, because the store/load functions always
-		write/read at least 512 bytes */
-		char cmosData[512] = {0};
+		char cmosData[CMOS_BUFFER_SIZE] = {0};
 		
 		if (res == EV_OK && status == true)
 		{

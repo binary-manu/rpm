@@ -8,6 +8,7 @@ namespace CMOS
 {
 	using namespace Common;
 	
+	const size_t CMOS_BUFFER_SIZE = 512;
 	enum RTCTimeSource {RTC_USE_SAVED, RTC_KEEP_CMOS, RTC_USE_USERDATA};
 	
 	// A "structified" vision of the first 12 bytes stored in the RTC CMOS

@@ -239,14 +239,14 @@ int CMOS::ReadPatchAndWriteCMOSData(
 	RTCTimeSource timeSource,
 	RTCTime newTime)
 {
-	char cmosData[512];
+	char cmosData[CMOS_BUFFER_SIZE];
 	if (MBR::LoadMBR(path, cmosData) != 0)
 	{
 		return -1;
 	}
 	RTCTime rtcData((RTCMap *)cmosData);
 
-	char cmosCurrent[512];
+	char cmosCurrent[CMOS_BUFFER_SIZE];
 	ReadCMOSData(cmosCurrent);
 	RTCTime rtcCurrent((RTCMap *)cmosCurrent);
 

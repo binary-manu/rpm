@@ -691,7 +691,7 @@ int process_line(int line_num,int argc, char**argv)
         printf("ERROR: \"/MBL\" requires a file name: /F:filename\n");
         exit(1);
       }
-			char mbr[512];
+			char mbr[MBR::MBR_BUFFER_SIZE];
 			if (MBR::LoadMBR(filename, mbr) != 0) {
         printf("ERROR: unable to load the MBR from '%s'\n", filename);
         exit(1);
@@ -709,7 +709,7 @@ int process_line(int line_num,int argc, char**argv)
        printf("ERROR: \"/CMS\" requires a file name: /F:filename\n");
        exit(1);
       }
-    char cmosData[512] = {0};
+    char cmosData[CMOS::CMOS_BUFFER_SIZE] = {0};
     CMOS::ReadCMOSData(cmosData);
     if (MBR::StoreMBR(filename, cmosData) != 0) {
       printf("ERROR: unable to save CMOS data to '%s'\n", filename);
