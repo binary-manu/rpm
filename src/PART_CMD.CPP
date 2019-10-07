@@ -101,7 +101,7 @@ void usage(void)
  "/MBS /F:FILENAME - Save MBR to FILENAME\r\n"
  "/MBL /F:FILENAME - Load MBR from FILENAME\r\n"
  "/CMS /F:FILENAME - Save CMOS to FILENAME\r\n"
- "/CML /F:FILENAME [/T:YYYY-MM-DD-HH-MM-SS|/T:] - Load MBR from FILENAME\r\n"
+ "/CML /F:FILENAME [/T:YY-MM-DD-HH-MM-SS|/T:] - Load MBR from FILENAME\r\n"
 #endif
 #if 0
  "Commands: disk-no - hard disk number, valid values are 1..8\r\n"
