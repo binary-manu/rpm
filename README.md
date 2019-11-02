@@ -25,6 +25,16 @@ saved by the [Wayback Machine](https://archive.org/web/web.php). I tried
 contacting the original author before releasing, but since this tool has been
 discontinued since 2002 I may never get a response._
 
+The main goal of this repository is to prevent this good, highly educational
+piece of software from vanishing as time passes. While it is less relevant in
+the era of UEFI and GPT, this program still has some uses and, more
+importantly, provides a fantastic playground for people interested in
+low-level, bare metal programming. As an example, this is one of those
+program that handle protected mode switch by themselves.
+
+I don't expect this repository to see further development, apart from keeping
+the code base able to compile as the tools it uses (DosBox, Wine, ...) evolve.
+
 ## License
 
 The original code didn't come with a license. My original work is distributed
@@ -74,7 +84,10 @@ some time and some GiB's of space.
 ### Project structure
 
     .
+    ├── CHANGELOG.md
     ├── docker
+    ├── docs
+    ├── LICENSE.txt
     ├── README.md
     ├── src
     └── tools
@@ -129,6 +142,12 @@ With respect to v2.44, this version adds:
   real time clock memory). This only covers the first 128 bytes of such data;
 * command line versions of the operations above.
 
+CMOS save/restore was meant as a simple ways to backup the current BIOS
+configuration before experimenting with settings or changing the battery.
+However, while it works well with some BIOSes, it totally fails with others.
+It is import to test it on a system-by-system basis before relying on it to
+produce usable backups.
+
 ### Command line options
 
 The `/MBS`, `/MBL`, `/CMS` and `/CML` switches are used to save or load either
@@ -136,8 +155,8 @@ the MBR or CMOS data to or from a file. All of them take an extra `/F` options
 which specifies the file used as the target of a store operation or as the
 source for a load operation.
 
-Additionally, `/CML` accepts a `/T` siwtch which defines how the date/time
-information int the CMOS memory must be handled:
+Additionally, `/CML` accepts a `/T` switch, which defines how the date/time
+information within CMOS memory must be handled:
 
 * if `/T` is not given, the current CMOS date/time is preserved (i.e. the
   system time is not changed);
