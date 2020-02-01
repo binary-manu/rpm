@@ -1,5 +1,13 @@
 # Ranish Partition Manager, improved
 
+|       `travis`         |        `master`        |
+|:----------------------:|:----------------------:|
+| [![][ci_travis]][repo] | [![][ci_master]][repo] |
+
+[ci_travis]: https://travis-ci.com/binary-manu/rpm.svg?branch=travis
+[ci_master]: https://travis-ci.com/binary-manu/rpm.svg?branch=master
+[repo]:      https://travis-ci.com/binary-manu/rpm
+
 This is an improved version of RPM, based on the historical version 2.44.
 
 ![RPM GUI][rpm-gui]
