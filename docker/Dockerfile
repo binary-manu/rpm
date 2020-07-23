@@ -1,11 +1,6 @@
-FROM archlinux/base
+FROM opensuse/leap:15.2
 
-RUN  \
-    printf '\n[multilib]\nInclude = /etc/pacman.d/mirrorlist\n' \
-        >> /etc/pacman.conf && \
-    pacman-key --init && pacman-key --populate archlinux && \
-    pacman -Syu --noconfirm dosbox wine && \
-    rm -f /var/lib/pacman/sync/* /var/cache/pacman/pkg/*
+RUN zypper ref && zypper in -y wine dosbox && zypper cc -a
 
 ENV SDL_VIDEODRIVER=dummy \
     SDL_AUDIODRIVER=dummy \
