@@ -1,10 +1,11 @@
 #!/bin/sh
 
-PID=$$
-TMP_LOG="DOS$(echo $PID | tail -c 5).LOG"
-TMP_CONF="/tmp/CNF$PID.LOG"
+set -e
 
-trap "rm -f $SOURCEDIR/$TMP_LOG $TMP_CONF" SIGTERM SIGQUIT SIGINT
+# Keep the log name in 8.3 format for DosBox
+TMP_LOG="$(mktemp --suffix=.tmp -p "$SOURCEDIR" XXXXXXXX )"
+
+trap 'rm -f "$TMP_LOG"' EXIT SIGTERM SIGQUIT SIGINT
 
 (
     # Patch the configuration file to add explicit mounts for T: and S:
@@ -18,16 +19,14 @@ trap "rm -f $SOURCEDIR/$TMP_LOG $TMP_CONF" SIGTERM SIGQUIT SIGINT
     done
 
     if [ -n "$CONF" ]; then
-        {
-            head -1 "$CONF"
-            echo "mount s $SOURCEDIR"
-            echo "mount t $TOOLSDIR"
-            tail -n +2 "$CONF"
-        } | sed -e 's/^\(T:\\[^[:blank:]]*\.EXE .*\)$/\1 >> S:\\'"$TMP_LOG"'/i' > "$TMP_CONF"
-        mv "$TMP_CONF" "$CONF"
+        # Note: the one-line 'a' command in sed scripts is a GNUism
+        sed -i \
+            -e "1a mount s $SOURCEDIR" \
+            -e "1a mount t $TOOLSDIR" \
+            -e 's/^\(T:\\[^[:blank:]]*\.EXE .*\)$/\1 >> S:\\'"${TMP_LOG##*/}"'/i' \
+            "$CONF"
     fi
 )
 
 "$REALDOSBOX" "$@" >&2
-cat "$SOURCEDIR/$TMP_LOG"
-rm "$SOURCEDIR/$TMP_LOG"
+cat "$TMP_LOG"
