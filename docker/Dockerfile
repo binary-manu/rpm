@@ -1,4 +1,4 @@
-FROM opensuse/leap:15.2
+FROM opensuse/leap:15.4
 
 RUN zypper ref && zypper in -y wine dosbox && zypper cc -a
 
