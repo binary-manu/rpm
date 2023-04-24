@@ -7,7 +7,7 @@ $oldPath = $Env:Path
 
 $Env:Path += ";T:\winwrap;T:\BC5\BIN"
 S:
-make
+make > S:\BUILD.LOG
 C:
 
 $Env:Path = $oldpath
