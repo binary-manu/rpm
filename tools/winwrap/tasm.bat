@@ -1,1 +1,1 @@
-powershell -File %~dp0\wrapper.ps1 %~n0.exe %*
+@powershell -File %~dp0\wrapper.ps1 %~n0.exe %*
