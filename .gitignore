@@ -5,3 +5,6 @@
 *.[Ee][Xx][Ee]
 *.[Ll][Oo][Gg]
 /src/part_msg.[ch]
+/src/*.[Tt][Mm][Pp]
+/src/stderr.txt
+/src/stdout.txt

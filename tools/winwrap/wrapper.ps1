@@ -15,7 +15,7 @@ echo %EC% > $DosBoxResult
 exit
 "@ | Out-File -FilePath $DosBoxConf.FullName -Encoding ASCII
 
-Start-Process -Wait -FilePath dosbox -ArgumentList "-conf", $DosBoxConf.FullName
+Start-Process -Wait -FilePath dosbox -ArgumentList "-conf", $DosBoxConf.FullName, "-noconsole"
 
 Get-Content $DosBoxOutput
 $ExitCode = Get-Content $DosBoxResult
