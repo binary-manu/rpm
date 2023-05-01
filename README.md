@@ -60,8 +60,8 @@ For convenience, there is a clean `build/clean.ps1` (for cleanup environment)
 and a build powershell script `build/build.ps1` which take care of building
 RPM.
 
-These scripts require the most recent Microsoft PowerShell-Framework (7.3)
-installed (x64 or x86) on the host machine. [link](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3#msi)
+These scripts require the most recent [Microsoft PowerShell-Framework (7.3)](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3#msi) installed (x64 or x86)
+on the host machine. 
 
 To build RPM, simply run:
 
@@ -160,12 +160,11 @@ by choosing one of the provided options.
 
 ### Building tools
 
-32rtm version 1.5 Copyright (c) 1992-94 Borland International
-Borland C++ 5.0 for Win32 Copyright (c) 1993, 1996 Borland International
-MAKE Version 4.0  Copyright (c) 1987, 1996 Borland International
-RTM loader version 1.5 Copyright (c) 1990-94 Borland International
-Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International
-Turbo Link  Version 7.1.30.1. Copyright (c) 1987, 1996 Borland International
-Turbo Link for Win32  Version 1.6.71.0 Copyright (c) 1993,1996 Borland International
-
+`32rtm version 1.5 Copyright (c) 1992-94 Borland International`
+`Borland C++ 5.0 for Win32 Copyright (c) 1993, 1996 Borland International`
+`MAKE Version 4.0  Copyright (c) 1987, 1996 Borland International`
+`RTM loader version 1.5 Copyright (c) 1990-94 Borland International`
+`Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International`
+`Turbo Link  Version 7.1.30.1. Copyright (c) 1987, 1996 Borland International`
+`Turbo Link for Win32  Version 1.6.71.0 Copyright (c) 1993,1996 Borland International`
 <!-- vi: set fo=crotn et sts=-1 sw=4 :-->
