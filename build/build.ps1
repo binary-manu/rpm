@@ -154,6 +154,10 @@ finally
 		$process_split.WaitForExit();
 	}
 	[ref]$i = 0; Get-ChildItem -Path $([IO.Path]::GetFullPath([IO.Path]::Combine($((Get-Item $PSScriptRoot).Parent.FullName),'build'))) XRPART* | Rename-Item -NewName { '{0}{1:d2}{2}' -f "XRPART", $i.value++, ".XXF" };
+	$lastSeg = (Get-ChildItem .\XRPART*.XXF)[-1]
+	if ($lastSeg.Length -lt 32768) {
+		'X' * (32768 - $lastSeg.Length) | Out-File -Append -NoNewLine -Encoding ascii $lastSeg.FullName
+	}
 
 	#########################
 	# Cleaning up processes #
