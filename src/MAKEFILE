@@ -11,7 +11,6 @@
 AS = tasm /ml /m3 /l
 CC = bcc32 -d -O -O2 -S -u- -x-
 LD = tlink -m -M -s -C -l -3 -c
-AR = tlib /c /p32
 
 .cpp.obj:
 	$(CC)  -o$&.asx $&.cpp
@@ -33,22 +32,16 @@ LNG = cs de fr it nl ru se sp
 
 EXT_OBJ = ext32.obj ext32cpp.obj ext32lib.obj ext32mem.obj
 WIN_OBJ = graph.obj  window.obj  fnt_ibm.obj  fnt_tiny.obj
-
 TEST_OBJ = test.obj
 BOOT_OBJ = boot.obj boot2.obj part_aux.obj part_bmg.obj part_tab.obj \
            part_vtc.obj part_msg.obj ipl.obj
-
 PART_OBJ = ipl.obj boot_f1x.obj bmboot.obj \
        part.obj part_aux.obj part_bmg.obj part_cmd.obj part_dsk.obj \
 		part_fat.obj part_gui.obj part_msg.obj part_tab.obj \
 		part_vtc.obj part_wiz.obj part_zip.obj
-
 ADDON_OBJ = GUI.OBJ CMOS.OBJ MBR.OBJ COMMON.OBJ
-		
 PCMD_OBJ = part_cmd.obj ipl.obj boot_f1x.obj \
            part_aux.obj part_dsk.obj part_fat.obj part_tab.obj
-
-#part_cmd: part_cmd.exe helper.exe
 
 en:   helper.exe part.exe
 all:  helper.exe en $(LNG)
@@ -56,15 +49,11 @@ boot: helper.exe boot.exe
 part: helper.exe part.exe
 test: helper.exe test.exe
 
-
 ext32.obj: ext32.asm ext32con.inc ext32dsk.inc ext32dos.inc ext32msc.inc \
                      ext32a20.inc ext32dpm.inc ext32raw.inc ext32xms.inc \
                      ext32vid.inc
 
-#$(TEST_OBJ):: ext32.h graph.h window.h
 $(PART_OBJ):: ext32.h part.h part_msg.h part_vtc.h disk_sim.h
-#$(PCMD_OBJ):: ext32.h graph.h window.h part.h part_msg.h part_vtc.h disk_sim.h
-#$(BOOT_OBJ):: ext32.h graph.h window.h part.h part_msg.h part_vtc.h
 $(ADDON_OBJ):: CMOS.H GUI.H MBR.H COMMON.H
 
 part_dsk.obj:: disk_sim.inc
@@ -76,8 +65,6 @@ boot.exe: $(EXT_OBJ) $(WIN_OBJ) $(BOOT_OBJ)
 !
 	helper -fix_exe boot.exe
 
-
-#$(WIN_OBJ)
 part.exe: $(EXT_OBJ) $(PART_OBJ) $(ADDON_OBJ)
 	$(LD) @&&!
 	  $(EXT_OBJ) $(PART_OBJ) $(ADDON_OBJ)
@@ -92,14 +79,12 @@ part_cmd.exe: $(EXT_OBJ) $(PCMD_OBJ)
 !
 	helper -fix_exe part_cmd.exe
 
-
 test.exe:     $(EXT_OBJ) $(WIN_OBJ) $(TEST_OBJ)
 	$(LD) @&&!
 	  $(EXT_OBJ) $(WIN_OBJ) $(TEST_OBJ)
 	  test.exe
 !
 	helper -fix_exe  test.exe
-
 
 part_msg.h part_msg.c: part_msg.msg
 	helper -exp_msg en part_msg.c part_msg.h
@@ -123,9 +108,10 @@ helper.exe: helper.c
 	del helper.obj
 
 zip: en
-	pklite part*.exe
+	copy part.exe part.org
+	pklite part.exe
 	pkzip -ex sources.zip makefile *.bat *.asm *.inc *.c* *.h *.msg *.txt
-	pkzip -ex partbeta.zip *.txt part*.exe cwsdpmi.exe
+	pkzip -ex release.zip part*.exe part*.org
 
 clean:
 	@clean.bat

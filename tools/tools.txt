@@ -1,0 +1,7 @@
+32rtm version 1.5 Copyright (c) 1992-94 Borland International
+Borland C++ 5.0 for Win32 Copyright (c) 1993, 1996 Borland International
+MAKE Version 4.0  Copyright (c) 1987, 1996 Borland International
+RTM loader version 1.5 Copyright (c) 1990-94 Borland International
+Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International
+Turbo Link  Version 7.1.30.1. Copyright (c) 1987, 1996 Borland International
+Turbo Link for Win32  Version 1.6.71.0 Copyright (c) 1993,1996 Borland International

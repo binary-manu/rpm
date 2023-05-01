@@ -1,13 +1,5 @@
 # Ranish Partition Manager, improved
 
-|       `travis`         |        `master`        |
-|:----------------------:|:----------------------:|
-| [![][ci_travis]][repo] | [![][ci_master]][repo] |
-
-[ci_travis]: https://travis-ci.com/binary-manu/rpm.svg?branch=travis
-[ci_master]: https://travis-ci.com/binary-manu/rpm.svg?branch=master
-[repo]:      https://travis-ci.com/binary-manu/rpm
-
 This is an improved version of RPM, based on the historical version 2.44.
 
 ![RPM GUI][rpm-gui]
@@ -15,10 +7,10 @@ This is an improved version of RPM, based on the historical version 2.44.
 ![RPM CLI][rpm-cli]
 
 The goal was to add a couple of features to RPM and allow it to be easily built
-on \*NIX systems, despite its build system depending on an ancient
-Windows-based toolchain.
+on recent windows systems, despite its build system depending on an ancient
+windows-based toolchain.
 
-_LEGAL DISCLAIMER 1: this repository includes parts of the Borland C++ 5.02
+_LEGAL DISCLAIMER 1: this repository includes parts of the Borland C++ 5.0
 toolchain, which are necessary to build the program. Technically, they are
 copyrighted tools, but it is pretty easy to find them as abandoware on the
 web, and they date back to 1997, so I find unlikely somebody cares about them
@@ -41,7 +33,7 @@ low-level, bare metal programming. As an example, this is one of those
 program that handle protected mode switch by themselves.
 
 I don't expect this repository to see further development, apart from keeping
-the code base able to compile as the tools it uses (DosBox, Wine, ...) evolve.
+the code base able to compile as the tools, it uses, evolve.
 
 ## License
 
@@ -50,98 +42,69 @@ under the MIT license.
 
 ## Ease of compilation
 
-RPM depends on a Borland toolchain, part of which requires a DOS environment,
-while other tools run under a Windows environment. To make building the code as
-easy as possible on \*NIX systems, I have made the following:
+RPM depends on a Borland C++ toolchain, part of which requires a DOS environment
+(16bit binaries), while other tools run under a Windows environment (32bit
+binaries). To make building the code as easy as possible on windows systems, I
+have made the following:
 
-* parts of the Borland C++ 5.02 toolchain have been included within the
-  repository. Only the file sets requires for the build are included and there
-  is no setup, so if you plan to grab a full copy of the development
-  environment, you should _not_ copy files from here. Instead, go to some
-  abandonware site, it is pretty easy to find this tool;
-* the build phase is run under Wine in order to execute Windows tools. When
-  running real mode programs that require a DOS environment, Wine transparently
-  delegates the execution to DosBox. Thanks to this two tools, the original build
-  system can still be run without the need to patch or port it to a different
-  toolchain;
-* the entire compilation takes place inside a Docker container, which can be
-  built using `docker/Dockerfile`. Putting all the tools inside a container
-  eases the setup of the build environment: you don't have to install Wine,
-  DosBox and other tools on your host.
+* parts of the Borland C++ 5.0 toolchain have been included within the
+  repository. Only the files which are strictly required for the build are
+  included and there is no setup. So if you plan to grab a full copy of the
+  development environment, you should _not_ copy files from here. Instead, go
+  to some abandonware site, it is pretty easy to find these tools;
+* the build phase is run under DOSBox-X in order to execute the building tools.
+  Thanks to these tools, the original build system can still be run without the
+  need to patch or port it to a different toolchain;
 
-For convenience, there is an helper shell script `docker/build.sh` which takes
-care of creating the Docker container, if it does not exists, and then uses it
-to build RPM. Additional arguments to `build.sh` are passed down to Borland
-Make.
+For convenience, there is a clean `build/clean.ps1` (for cleanup environment)
+and a build powershell script `build/build.ps1` which take care of building
+RPM.
+
+These scripts require the most recent Microsoft PowerShell-Framework (7.3)
+installed (x64 or x86) on the host machine. [link](https://learn.microsoft.com/en-us/powershell/scripting/install/installing-powershell-on-windows?view=powershell-7.3#msi)
 
 To build RPM, simply run:
 
-    cd docker
-    ./build.sh
+    cd build
+    ./build.ps1
 
-To clean the working directory, run:
+To clean the working directories, run:
 
-    cd docker
-    ./build.sh clean
+    cd build
+    ./clean.ps1
 
-Keep in mind that this script may have to create the container from scratch,
-which involves downloading the base image for the container and all the tools
-the must be installed inside it. Depending on your connection, this may take
-some time and some GiB's of space.
+Keep in mind that these script may have to download the required 3rd party
+components and tools to complete the building environment. Depending on your
+connection, this may take some time and some MiB's of space.
 
 ### Project structure
 
     .
-    ├── CHANGELOG.md
-    ├── docker
+    ├── build
     ├── docs
-    ├── LICENSE.txt
-    ├── README.md
     ├── src
-    └── tools
+    ├── tools
+    ├── CHANGELOG.md
+    ├── LICENSE.txt
+    └── README.md
+
+`build` contains files needed to build and the final output of the build system
+and ancillary tools.
 
 `src` contains the source code and the Makefiles to build it. The build system
 is in-tree, so all object files and output artifacts will be placed here. In
 particular, the final executable is `src/PART.EXE`.
 
-`tools` contains a (partial) copy of the Borland C++ 5.02 toolchain.
+`tools` contains a (partial) copy of the Borland C++ 5.0 toolchain and the
+other required components.
 
-`docker` contains files needed to build the container hosting the build system
-and ancillary tools.
-
-While compiling, the output from the various tools (Turbo Assembler, compiler,
-linker, ...) will be written to `src/BUILD.LOG`. Output produced by the
-invocation of `docker/build.sh` to standard output and standard error is
-extremely noisy and not very useful, consisting mainly of DosBox complaining
-about audio/video rendering which has been disabled. I decided to keep such
-output showing in order to avoid hiding things from users, but unless there is
-a problem to analyze I recommend redirecting output to `/dev/null`. Important
-information, like errors in source files, will still be logged to
-`src/BUILD.LOG`.
-
-### Intercepting output from DosBox invocations
-
-Some tools run under DosBox, which doesn't produce textual output of what
-programs write on the emulated screen. In order to obtain such output, commands
-run under DosBox must have their standard output redirected to a file from
-within DosBox itself, as in `FOO.EXE > MYLOG.TXT`.
-
-When Wine detects that a program must be run in real mode, as opposed to under
-a Win32 environment, it creates a configuration file for DosBox containing the
-command to execute, plus some boilerplate to mount drive letters, and calls
-DosBox to execute it. Such file needs to be patched in order to add appropriate
-redirection requests so that output from real mode tools can be saved to the
-log file.
-
-This is implemented by making Wine call a fake DosBox executable
-(`docker/dosbox`) which patches the configuration file and then calls the
-real DosBox. While this solution works, it depends on the actual structure of
-the configuration file Wine produces, so it is potentially prone to breakage
-if that file format changes.
+While compiling, the output from the various tools (Assembler, compiler, linker
+and so on) will be written to `build/BUILD.LOG`. Important information, like
+errors in source files, will be logged in there too.
 
 ## Extra features
 
-With respect to v2.44, this version adds:
+With respect to v2.44, this version adds (without including upcoming changes):
 
 * the ability to save and restore the entire MBR to file, which was
   unimplemented in the original code (the corresponding keyboard shortcuts
@@ -194,5 +157,15 @@ by choosing one of the provided options.
 [rpm-cli]: docs/rpm-cli.png
 [rpm-mbr-dlg]: docs/rpm-mbr-dlg.png
 [rpm-cmos-dlg]: docs/rpm-cmos-dlg.png
+
+### Building tools
+
+32rtm version 1.5 Copyright (c) 1992-94 Borland International
+Borland C++ 5.0 for Win32 Copyright (c) 1993, 1996 Borland International
+MAKE Version 4.0  Copyright (c) 1987, 1996 Borland International
+RTM loader version 1.5 Copyright (c) 1990-94 Borland International
+Turbo Assembler  Version 3.1  Copyright (c) 1988, 1992 Borland International
+Turbo Link  Version 7.1.30.1. Copyright (c) 1987, 1996 Borland International
+Turbo Link for Win32  Version 1.6.71.0 Copyright (c) 1993,1996 Borland International
 
 <!-- vi: set fo=crotn et sts=-1 sw=4 :-->
