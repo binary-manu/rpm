@@ -1,3 +1,5 @@
+⚠️ **Migrated to https://codeberg.org/binary-manu/rpm** ⚠️
+
 # Ranish Partition Manager, improved
 
 |       `travis`         |        `master`        |
